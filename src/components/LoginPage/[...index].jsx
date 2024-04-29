@@ -1,12 +1,17 @@
 import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
- 
+import 'tailwindcss/tailwind.css';
+import { generateUniqueNumber } from '../../funciones/functions';
+// import '../../styles/globals.css'
+
 export default function LoginPage() {
   const router = useRouter()
+  const uniqueNumber = generateUniqueNumber();
+
  
   async function handleSubmit(event) {
     event.preventDefault()
- 
+    
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email')
     const password = formData.get('password')
@@ -17,8 +22,8 @@ export default function LoginPage() {
       body: JSON.stringify({ email, password }),
     })
     console.log(response)
+    router.push(`/welcome/${uniqueNumber}`)
     if (response.ok) {
-      router.push('/welcome/2323323')
     } else {
       // Handle errors
     }
@@ -26,7 +31,8 @@ export default function LoginPage() {
  
   return (
     <>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className='grid md:grid-cols-2 gap-1'>
+      <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Iniciar sesión</h2>
@@ -34,20 +40,26 @@ export default function LoginPage() {
             <form class="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" required class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Email" />
+                <input id="email" name="email" type="email" autocomplete="email" required className="custom-input" placeholder="Email" />
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input id="password" name="password" type="password" autocomplete="current-password" required class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Contraseña" />
+                <input id="password" name="password" type="password" autocomplete="current-password" required className='custom-input' placeholder="Contraseña" />
             </div>
             <div>
-                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button type="submit" className='custom-button'>
                 Iniciar sesión
                 </button>
             </div>
             </form>
         </div>
+      </div>
+      <div className=' hidden md:block'>
+        <div className='flex justify-center items-center'>
+          <img src="/logo-redel.png" alt='login' width={500} height={500} />
         </div>
+      </div>
+    </div>
 
     </>
   )
