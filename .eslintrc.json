@@ -1,0 +1,50 @@
+// devDependencies required
+// - eslint
+// - eslint-config-next
+// - eslint-config-standard
+// - eslint-plugin-import
+// - eslint-plugin-n
+// - eslint-plugin-promise
+// - eslint-plugin-react
+// - eslint-plugin-tailwindcss
+
+// command yarn install
+
+// yarn add -D eslint eslint-plugin-react eslint-config-next eslint-config-standard eslint-plugin-tailwindcss eslint-plugin-node eslint-plugin-promise
+
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "next/core-web-vitals",
+    "standard",
+    "plugin:tailwindcss/recommended"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "tailwindcss"],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/classnames-order": "error",
+    "camelcase": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "object-curly-spacing": [2, "always"],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "flatTernaryExpressions": true
+      }
+    ]
+  }
+}
