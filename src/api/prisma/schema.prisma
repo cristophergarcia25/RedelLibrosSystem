@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model usuario {
+  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
+  email                 String                  @unique
+  rol                   String
+  nombre                String
+  apellido              String
+  contrasena            String
+  historial_operaciones historial_operaciones[]
+}
+
+model institucion {
+  id                      String           @id @default(auto()) @map("_id") @db.ObjectId
+  nombre                  String
+  direccion               String
+  contacto_principal      String
+  tel_contacto_principal  String
+  contacto_secundario     String?
+  tel_contacto_secundario String?
+  porcentaje_descuento    Float?
+  consignaciones          consignaciones[]
+  factura                 factura[]
+  cotizaciones            cotizaciones[]
+}
+
+model historial_operaciones {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  accion     String
+  fecha      DateTime @default(now())
+  usuario    usuario  @relation(fields: [id_usuario], references: [id])
+  id_usuario String   @db.ObjectId
+  recurso    String
+  detalle    String
+}
+
+model inventario {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  isbn            Int
+  editorial       String
+  titulo          String
+  cantidad        Int
+  precio_unitario Float
+  consignaciones  consignaciones[]
+}
+
+model consignaciones {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  fecha          DateTime    @default(now())
+  inventario     inventario  @relation(fields: [id_libro], references: [id])
+  id_libro       String      @db.ObjectId
+  cantidad       Int
+  estado         String
+  id_usuario     String
+  institucion    institucion @relation(fields: [id_institucion], references: [id])
+  id_institucion String      @db.ObjectId
+}
+
+model factura {
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  fecha          DateTime            @default(now())
+  num_factura    Int
+  tipo_documento String
+  institucion    institucion         @relation(fields: [id_institucion], references: [id])
+  id_institucion String              @db.ObjectId
+  articulos      detalle_articulos[]
+  descuento      Float?
+  id_usuario     String
+  estado         String
+}
+
+model cotizaciones {
+  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
+  fecha               DateTime            @default(now())
+  institucion         institucion         @relation(fields: [id_institucion], references: [id])
+  id_institucion      String              @db.ObjectId
+  detalle_articulos   detalle_articulos[]
+  id_usuario_solicita String              @db.ObjectId
+  estado              String
+  aprobado_por        aprobado_por?
+}
+
+type detalle_articulos {
+  id_inventario   String
+  cantidad        String
+  precio_unitario String
+  precio_total    String
+}
+
+type aprobado_por {
+  id_usuario       String
+  nombre           String
+  fecha_aprobacion DateTime @default(now())
+}
