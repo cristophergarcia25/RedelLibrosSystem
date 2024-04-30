@@ -18,7 +18,7 @@ function Sidebar() {
     return (
       <>
         <aside id="default-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <div className="h-full px-3 py-4 overflow-y-auto bg-emerald-300 dark:bg-emerald-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-emerald-400 dark:bg-emerald-400">
             <a  className="flex items-center ps-2.5 mb-5">
                 <img src="/logo-redel-removebg.png" className="h-14 me-3 sm:h-16" alt="Redel Logo" />
                 <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Redel Libros</span>
