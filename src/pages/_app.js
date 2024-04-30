@@ -2,6 +2,7 @@
 
 import Sidebar from '../components/globals/Sidebar';
 import '../styles/global.css';
+import 'tailwindcss/tailwind.css';
 
 function MyApp({ Component, pageProps, router }) {
   // Verifica si la página actual es index.js
@@ -13,7 +14,7 @@ function MyApp({ Component, pageProps, router }) {
       {!isIndexPage && <Sidebar />}
       
       {/* Renderiza el componente de la página actual dentro del sidebar */}
-      <div className={isIndexPage ? "" : "ml-64"}>
+      <div className={isIndexPage ? "" : "ml-64 bg-blanco h-screen"}>
         <Component {...pageProps} />
       </div>
     </div>

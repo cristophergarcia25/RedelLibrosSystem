@@ -2,10 +2,8 @@ import React from 'react'
 
 const libros = () => {
   return (
-    <div>
-        
-    </div>
+    <div>libros</div>
   )
 }
 
-export default index
+export default libros
