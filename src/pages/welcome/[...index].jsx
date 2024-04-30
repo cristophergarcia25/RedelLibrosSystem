@@ -2,7 +2,7 @@ import React from 'react'
 
 const Welcome = () => {
   return (
-    <div className='grid grid-cols-3 p-6' >
+    <div className='grid md:grid-cols-3 p-6' >
       
 
 <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
