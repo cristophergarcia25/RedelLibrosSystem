@@ -2,6 +2,7 @@
 
 import Sidebar from '../components/globals/Sidebar';
 import '../styles/global.css';
+import 'tailwindcss/tailwind.css';
 
 function MyApp({ Component, pageProps, router }) {
   // Verifica si la página actual es index.js

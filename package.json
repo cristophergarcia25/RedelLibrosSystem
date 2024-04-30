@@ -1,8 +1,5 @@
 {
   "private": true,
-  "type": "module",
-  "name": "RedelSystem",
-  "version": "1.0.0",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
