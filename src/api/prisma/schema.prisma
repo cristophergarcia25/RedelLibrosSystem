@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = "mongodb+srv://davidisaibm11:irgkn4Yo53tipgYe@redelsystem.rzpgyj2.mongodb.net/redelsystem?retryWrites=true&w=majority&appName=RedelSystem"
+  url      = env("DATABASE_URL")
 }
 
 model usuario {
