@@ -10,13 +10,13 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = "mongodb+srv://davidisaibm11:irgkn4Yo53tipgYe@redelsystem.rzpgyj2.mongodb.net/redelsystem?retryWrites=true&w=majority&appName=RedelSystem"
 }
 
 model usuario {
   id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
   email                 String                  @unique
-  rol                   String
+  rol                   String?
   nombre                String
   apellido              String
   contrasena            String
