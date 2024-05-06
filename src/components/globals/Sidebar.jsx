@@ -24,10 +24,17 @@ function Sidebar() {
           console.log(response)
     }
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isHistorialOpen, setIsHistorialOpen] = useState(false);
 
-    const handleLibrosClick = () => {
-        setIsMenuOpen(!isMenuOpen); // Toggle the menu open/closed
+    const handleHistorialClick = () => {
+        setIsHistorialOpen(!isHistorialOpen); // Toggle the menu open/closed
+    };
+
+
+    const [isFacturasOpen, setIsFacturasOpen] = useState(false);
+    6
+    const handleFacturasClick = () => {
+        setIsFacturasOpen(!isFacturasOpen); // Toggle the menu open/closed
     };
 
     const getEnv = () => {
@@ -71,7 +78,7 @@ function Sidebar() {
                         </a>
                     </li>
                     <li                 
-                        onClick={handleLibrosClick}
+                        onClick={()=>router.push(`/libros/${uniqueNumber}`)}
     >
                         <button type="button" className="flex items-center w-full p-2 text-base  text-white rounded-lgtransition duration-75 rounded-lg group  hover:bg-azul dark:hover:bg-azul group dark:text-white " aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -79,35 +86,10 @@ function Sidebar() {
                         </svg>
     
                             <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Libros</span>
-                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                            </svg>
+                          
                         </button>
-                        <ul id="dropdown-example" className="hidden py-2 space-y-2">
-                            <li>
-                                <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
-                            </li>
-                            <li>
-                                <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
-                            </li>
-                            <li>
-                                <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
-                            </li>
-                        </ul>
                     </li>
-                    {isMenuOpen && (
-                    <ul className="">
-                            <li>
-                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
-                            </li>
-                            <li>
-                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
-                            </li>
-                            <li>
-                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
-                            </li>
-                    </ul>
-                )}
+                    
                    
                     <li onClick={()=>router.push(`/clientes/${uniqueNumber}`)}>
                         <a href="#" className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-azul  dark:hover:bg-azul">
@@ -135,6 +117,49 @@ function Sidebar() {
                         <span className="flex-1 ms-3 whitespace-nowrap">Consignaciones</span>
                         </a>
                     </li>
+
+                    <li                 
+                        onClick={handleFacturasClick}
+    >
+                        <button type="button" className="flex items-center w-full p-2 text-base  text-white rounded-lgtransition duration-75 rounded-lg group  hover:bg-azul dark:hover:bg-azul group dark:text-white " aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                        </svg>
+
+    
+                            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Facturas</span>
+                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                    </li>
+                    {isFacturasOpen && (
+                    <ul className="">
+                            <li onClick={()=>router.push(`/facturas/facturas/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                </svg>
+                                    Facturas</a> 
+                            </li>
+                            <li onClick={()=>router.push(`/facturas/prefacturas/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                    Pre-Facturas</a>
+                            </li>
+                            <li onClick={()=>router.push(`/facturas/anularfacturas/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                    Anular Facturas</a>
+                            </li>
+                            
+                    </ul>
+                )}
+
                     <li onClick={()=>router.push(`/reportes/${uniqueNumber}`)}>
                         <a href="#" className="flex items-center p-2 text-white rounded-lg dark:text-white  hover:bg-azul  dark:hover:bg-azul group">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -145,15 +170,47 @@ function Sidebar() {
                         <span className="flex-1 ms-3 whitespace-nowrap">Reportes</span>
                         </a>
                     </li>
-                    <li onClick={()=>router.push(`/historial/${uniqueNumber}`)}>
-                        <a href="#" className="flex items-center p-2 text-white rounded-lg dark:text-white  hover:bg-azul dark:hover:bg-azul group">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    
+                    <li                 
+                        onClick={handleHistorialClick}
+    >
+                        <button type="button" className="flex items-center w-full p-2 text-base  text-white rounded-lgtransition duration-75 rounded-lg group  hover:bg-azul dark:hover:bg-azul group dark:text-white " aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                         </svg>
+
+
     
-                        <span className="flex-1 ms-3 whitespace-nowrap">Historial de movimientos</span>
-                        </a>
+                            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Historial</span>
+                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
                     </li>
+                    {isHistorialOpen && (
+                    <ul className="">
+                            <li onClick={()=>router.push(`/historial/inventario/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                    Inventario</a> 
+                            </li>
+                            <li onClick={()=>router.push(`/historial/libros/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                    Libros</a>
+                            </li>
+                            <li onClick={()=>router.push(`/historial/cotizaciones/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                    Cotizaciones</a>
+                            </li>
+                            <li onClick={()=>router.push(`/historial/facturas/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                    Facturas</a>
+                            </li>
+                            <li onClick={()=>router.push(`/historial/consignaciones/${uniqueNumber}`)}>
+                                <a href="#" className="flex items-center w-full p-1 text-white transition duration-75 rounded-lg pl-11 group hover:bg-azul dark:text-white dark:hover:bg-azul">
+                                    Consignaciones</a>
+                            </li>
+                    </ul>
+                )}
                     <li onClick={()=>router.push(`/usuarios/${uniqueNumber}`)}>
                         <a href="#" className="flex items-center p-2 text-white rounded-lg dark:text-white  hover:bg-azul  dark:hover:bg-azul group">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
