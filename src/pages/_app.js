@@ -1,5 +1,7 @@
 // _app.js
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from '../components/globals/Sidebar';
 import '../styles/global.css';
 import 'tailwindcss/tailwind.css';
@@ -17,6 +19,17 @@ function MyApp({ Component, pageProps, router }) {
       <div className={isIndexPage ? "" : "ml-64 bg-blanco h-screen"}>
         <Component {...pageProps} />
       </div>
+      <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"></ToastContainer>
     </div>
   );
 }

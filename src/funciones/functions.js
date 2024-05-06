@@ -1,3 +1,6 @@
+import CryptoJS from 'crypto-js';
+
+
 // Función para generar un número único de 8 dígitos basado en la fecha del día
 export function generateUniqueNumber() {
     const today = new Date();
@@ -14,4 +17,35 @@ export function generateUniqueNumber() {
   
     return uniqueNumber;
   }
+
+// Función para encriptar y guardar en localStorage
+export function encryptAndSetLocalStorage(key, data) {
+  const password = 'tu_contraseña_secreta'; // Coloca aquí tu contraseña secreta
+  try {
+    console.log('se encripto')
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), password).toString();
+    console.log(encryptedData)
+    localStorage.setItem(key, encryptedData);
+    return true;
+  } catch (error) {
+    console.error('Error al encriptar y guardar en localStorage:', error);
+    return false;
+  }
+}
+
+// Función para desencriptar y obtener desde localStorage
+export function decryptAndGetLocalStorage(key) {
+  const password = 'tu_contraseña_secreta'; // Coloca aquí tu contraseña secreta
+  try {
+    const encryptedData = localStorage.getItem(key);
+    if (!encryptedData) return null;
+
+    const bytes = CryptoJS.AES.decrypt(encryptedData, password);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    return decryptedData;
+  } catch (error) {
+    console.error('Error al desencriptar y obtener desde localStorage:', error);
+    return null;
+  }
+}
   

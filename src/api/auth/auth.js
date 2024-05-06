@@ -1,19 +1,18 @@
 // auth.js
-export async function signIn(credentials, { email, password }) {
-    // Simulación de datos quemados (reemplaza esto con tus datos reales)
-    const users = [
-      { id: 1, email: 'abel@alvarez.com', password: '1234' },
-      { id: 2, email: 'user2@example.com', password: 'password2' },
-    ];
-  
-    // Buscar el usuario por email
-    const user = users.find(user => user.email === email);
-  
-    if (!user || user.password !== password) {
-      throw new Error('Invalid credentials');
+
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+export const useAuth = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token'); // Aquí debes implementar la lógica para obtener el token de inicio de sesión, por ejemplo, desde el almacenamiento local
+
+    // Verifica si hay un token
+    if (!token) {
+      router.push('/'); // Redirige a la página de inicio de sesión si no hay un token
     }
-  
-    // Simulación de autenticación exitosa
-    return { id: user.id, email: user.email };
-  }
-  
+  }, []);
+
+};
