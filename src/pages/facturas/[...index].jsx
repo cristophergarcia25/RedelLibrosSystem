@@ -2,7 +2,7 @@ import React from 'react'
 
 const facturas = () => {
   return (
-    <div>facturas</div>
+    <div className="mb-2 text-2xl font-bold tracking-tight text-black dark:text-black">Facturas</div>
   )
 }
 
