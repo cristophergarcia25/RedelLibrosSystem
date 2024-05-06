@@ -1,20 +1,15 @@
 {
-  "type": "module",
   "private": true,
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "start": "node index.js",
-    "lint": "next lint",
-    "server": "nodemon src/api/src/index.js"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.13.0",
     "eslint-config-next": "^14.2.3",
-    "express": "^4.19.2",
     "flowbite": "^2.3.0",
     "next": "^14.2.3",
-    "nodemon": "^3.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -28,7 +23,6 @@
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.1.0",
     "postcss": "^8.4.38",
-    "prisma": "^5.13.0",
     "tailwindcss": "^3.4.3"
   }
 }
