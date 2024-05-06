@@ -2,6 +2,7 @@ import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import 'tailwindcss/tailwind.css';
 import { generateUniqueNumber } from '../../funciones/functions';
+import Image from 'next/image';
 // import '../../styles/globals.css'
 
 export default function LoginPage() {
@@ -15,18 +16,22 @@ export default function LoginPage() {
     const formData = new FormData(event.currentTarget)
     const email = formData.get('email')
     const password = formData.get('password')
+
+    console.log(email,password)
+
+    
  
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
-    console.log(response)
-    router.push(`/welcome/${uniqueNumber}`)
-    if (response.ok) {
-    } else {
-      // Handle errors
-    }
+    // const response = await fetch('/api/auth/login', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ email, password }),
+    // })
+    // console.log(response)
+    // router.push(`/welcome/${uniqueNumber}`)
+    // if (response.ok) {
+    // } else {
+    //   // Handle errors
+    // }
   }
  
   return (
@@ -54,10 +59,8 @@ export default function LoginPage() {
             </form>
         </div>
       </div>
-      <div className=' hidden md:block'>
-        <div className='flex justify-center items-center'>
-          <img src="/logo-redel.png" alt='login' width={500} height={500} />
-        </div>
+      <div className='hidden md:flex md:justify-center md:items-center bg-celeste'>
+        <img  src="/logoblanco.png" alt='login' className="w-96 h-64" />
       </div>
     </div>
 
