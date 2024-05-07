@@ -49,7 +49,7 @@ model historial_operaciones {
 
 model inventario {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  isbn            Int
+  isbn            String
   editorial       String
   titulo          String
   cantidad        Int
