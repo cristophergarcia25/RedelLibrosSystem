@@ -76,4 +76,23 @@ export class Inventario {
       return error;
     }
   }
+
+  async eliminarLibro(id) {
+    try {
+      const eliminarLibroResponse = await prisma.inventario.delete({
+        where: {
+          id: id,
+        },
+      });
+      if (!eliminarLibroResponse)
+        return {
+          error: "Error eliminando libro",
+          detalle: "Ocurrio un error al intentar borrar el libro",
+        };
+
+      return eliminarLibroResponse;
+    } catch (error) {
+      return error;
+    }
+  }
 }

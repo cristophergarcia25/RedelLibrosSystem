@@ -5,6 +5,8 @@ import loginApi from "../rutas/security/loginApi.js";
 import agregarLibro from "../rutas/inventario/agregarLibro.js";
 import listarLibros from "../rutas/inventario/listarLibros.js";
 import obtenerLibro from "../rutas/inventario/obtenerLibro.js";
+import agregarInstitucion from "../rutas/instituciones/agregarInstitucion.js";
+import listarInstituciones from "../rutas/instituciones/listarInstituciones.js";
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.use("/", loginApi);
 app.use("/", agregarLibro);
 app.use("/", listarLibros);
 app.use("/", obtenerLibro);
+app.use("/", agregarInstitucion);
+app.use("/", listarInstituciones);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
