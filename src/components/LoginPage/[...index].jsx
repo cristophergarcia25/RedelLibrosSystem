@@ -42,6 +42,7 @@ export default function LoginPage() {
           const errorMessage = data && data.error ? data.error : 'Error en la solicitud';
           toast.error(errorMessage);
         }else{
+          console.log(data)
           encryptAndSetLocalStorage('user', data)
           toast.success(LOGIN_SUCCESS_MESSAGE + ' ' + data.nombre)
           router.push(`/welcome/${uniqueNumber}`)
