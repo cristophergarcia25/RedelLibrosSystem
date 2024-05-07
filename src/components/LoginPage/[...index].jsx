@@ -38,7 +38,7 @@ export default function LoginPage() {
         // Maneja la respuesta de la API
         const data = await response.json();
         console.log(data); 
-        if(data.error){
+        if(data.error || data.name === 'PrismaClientInitializationError'){
           toast.error(data.error)
         }else{
           encryptAndSetLocalStorage('user', data)
