@@ -26,6 +26,8 @@ export default function LoginPage() {
     };
 
     try {
+
+      console.log(body)
       // Realiza la solicitud POST a la API
       const response = await fetch('http://localhost:4000/login', {
         method: 'POST',
