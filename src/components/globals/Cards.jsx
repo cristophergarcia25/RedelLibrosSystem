@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const Cards = () => {
-
+export const Cards = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredClientes, setFilteredClientes] = useState([]);
 
@@ -31,21 +30,21 @@ const Cards = () => {
       ];
 
       // Función para eliminar las tildes de los caracteres acentuados
-const removeAccents = (str) => {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-};
+      const removeAccents = (str) => {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
 
-useEffect(() => {
-    const filtered = clientes.filter(cliente => {
-        const values = Object.values(cliente).map(value =>
-            typeof value === 'string' ? removeAccents(value).toLowerCase() : value
-        );
-        return values.some(value =>
-            typeof value === 'string' && value.includes(removeAccents(searchTerm.toLowerCase()))
-        );
-    });
-    setFilteredClientes(filtered);
-}, [searchTerm, clientes]);
+    useEffect(() => {
+        const filtered = clientes.filter(cliente => {
+            const values = Object.values(cliente).map(value =>
+                typeof value === 'string' ? removeAccents(value).toLowerCase() : value
+            );
+            return values.some(value =>
+                typeof value === 'string' && value.includes(removeAccents(searchTerm.toLowerCase()))
+            );
+        });
+        setFilteredClientes(filtered);
+    }, [searchTerm]);
 
     
 
@@ -53,13 +52,14 @@ useEffect(() => {
         setSearchTerm(event.target.value);
     };
 
+
   return (
     <>
-    <div className='p-2'>
-        {/* Empieza searchbar */}
+     <div className='p-2'>
+        Empieza searchbar
     <form className="w-full mx-auto">   
         <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div className="relative">
+         <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg className="w-4 h-4 text-celeste dark:text-celeste" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -90,5 +90,3 @@ useEffect(() => {
     </>
   )
 }
-
-export default Cards
