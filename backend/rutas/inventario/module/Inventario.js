@@ -50,13 +50,14 @@ export class Inventario {
     }
   }
 
-  async obtenerLibro(isbn) {
+  async obtenerLibro(id) {
     try {
       const obtenerLibroResponse = await prisma.inventario.findFirst({
         where: {
-          isbn: isbn,
+          id: id,
         },
         select: {
+          isbn: true,
           precio_unitario: true,
           titulo: true,
           editorial: true,
