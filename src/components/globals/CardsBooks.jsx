@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 import { Modals } from './Modals';
 import { toast } from 'react-toastify';
 import { LOGIN_SUCCESS_MESSAGE } from '../../utils/messages';
+import { IoTrashSharp } from 'react-icons/io5';
 
 
 export const CardsBooks = ({ items, reloadList= false,  }) => {
@@ -133,12 +134,20 @@ const handleSearchChange = (event) => {
 
                 <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-1 p-2'>
                     {filteredBooks.map((book, index) => (
-                        <div key={index} className="p-4 cursor-pointer text-base font-medium bg-gris-claro border border-gris-oscuro rounded-lg shadow dark:bg-gris-claro dark:border-gris-oscuro">
-                            <p title={book.titulo} className="text-xl truncate font-bold text-gray-900 dark:text-black">{book.titulo}</p>
-                            <p className="text-medium text-black dark:text-black">ISBN: {book.isbn}</p>
-                            <p className="text-medium text-black dark:text-black">Editorial: {book.editorial}</p>
-                            <p className="text-medium text-black dark:text-black">Cantidad: {book.cantidad}</p>
-                            <p className="text-medium text-black dark:text-black">Precio Unitario: ${book.precio_unitario.toFixed(2)}</p>
+                        <div key={index} className="cursor-pointer text-base font-medium bg-gris-claro border border-gris-oscuro rounded-lg shadow dark:bg-gris-claro dark:border-gris-oscuro">
+                            <div className="bg-celeste w-full rounded-t-lg flex justify-center items-center p-2">
+                              <p title={book.titulo} className="text-xl truncate font-bold text-white">{book.titulo}</p>
+                            </div>
+                            <div className='p-2'>
+                              <p className="text-medium text-black dark:text-black">ISBN: {book.isbn}</p>
+                              <p className="text-medium text-black dark:text-black">Editorial: {book.editorial}</p>
+                              {/* <p className="text-medium text-black dark:text-black">Cantidad: {book.cantidad}</p> */}
+                              <p className="text-medium text-black dark:text-black">Precio Unitario: ${book.precio_unitario.toFixed(2)}</p>
+                            </div>
+                            <div className='flex justify-center items-center p-2 cursor-pointer'>
+                              <FaEdit className='text-2xl m-2 shrink-0 text-celeste hover:text-indigo-300 dark:text-celeste' />
+                              <IoTrashSharp className='text-2xl m-2 shrink-0 text-red-500 hover:text-red-700 dark:text-red-500' />
+                            </div>
                         </div>
                     ))}
                 </div>

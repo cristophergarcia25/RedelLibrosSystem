@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaEdit } from 'react-icons/fa';
 import { Modals } from './Modals';
 import { toast } from 'react-toastify';
 
@@ -72,6 +72,10 @@ export const TableBooks = ({ items, reloadList = false }) => {
         }
     }
 
+    const handleModalAmount = (valor) => {
+        console.log(valor)
+    }
+
     return (
         <>
             <div className='p-2'>
@@ -106,6 +110,7 @@ export const TableBooks = ({ items, reloadList = false }) => {
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Editorial</th>
                                 <th scope="col" className=" px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
                                 <th scope="col" className="text-center px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
+                                <th scope="col" className="text-center px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -125,6 +130,9 @@ export const TableBooks = ({ items, reloadList = false }) => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center">
                                         <div className="text-sm text-gray-900">${book.precio_unitario.toFixed(2)}</div>
+                                    </td>
+                                    <td onClick={() => handleModalAmount(book)} className="px-6 py-4 whitespace-nowrap text-center flex justify-center">
+                                        <FaEdit className="text-blue-500 cursor-pointer" />
                                     </td>
                                 </tr>
                             ))}

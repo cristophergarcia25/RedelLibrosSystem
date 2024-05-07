@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 import { Modals } from './Modals';
 import { toast } from 'react-toastify';
+import { IoTrashSharp } from 'react-icons/io5';
 
 export const Cards = ({ items=[], reloadList= false }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -123,14 +124,21 @@ export const Cards = ({ items=[], reloadList= false }) => {
       </div>
       <div className='grid md:grid-cols-4 gap-1 p-2'>
         {filteredItems.map((item) => (
-          <div key={item.id} className="p-4 cursor-pointer text-base font-medium bg-gris-claro border border-gris-oscuro rounded-lg shadow dark:bg-gris-claro dark:border-gris-oscuro">
-            <p className="text-xl truncate font-bold text-gray-900 dark:text-black">{item.nombre}</p>
-            <p className="text-black dark:text-black">Porcentaje de descuento: {item.porcentaje_descuento || 'N/A'}</p>
-            <p className="text-black dark:text-black">Contacto principal: {item.contacto_principal || 'N/A'}</p>
-            <p className="text-black dark:text-black">Dirección: {item.direccion || 'N/A'}</p>
-            <p className="text-black dark:text-black">Contacto secundario: {item.contacto_secundario || 'N/A'}</p>
-            <p className="text-black dark:text-black">Teléfono de contacto secundario: {item.tel_contacto_secundario || 'N/A'}</p>
-            <p className="text-black dark:text-black">Teléfono de contacto principal: {item.tel_contacto_principal || 'N/A'}</p>
+          <div key={item.id} className="  cursor-pointer text-base font-medium bg-gris-claro border border-gris-oscuro rounded-lg shadow dark:bg-gris-claro dark:border-gris-oscuro">
+            <div className="bg-celeste w-full rounded-t-lg flex justify-center items-center p-2">
+              <p className='text-xl truncate font-bold text-white'>{item.nombre}</p>
+            </div>
+            <div className='p-2'>
+              <p className="text-black dark:text-black">Porcentaje de descuento: {item.porcentaje_descuento || 'N/A'}</p>
+              <p className="text-black dark:text-black">Contacto principal: {item.contacto_principal || 'N/A'}</p>
+              <p className="text-black dark:text-black">Dirección: {item.direccion || 'N/A'}</p>
+              <p className="text-black dark:text-black">Contacto secundario: {item.contacto_secundario || 'N/A'}</p>
+              <p className="text-black dark:text-black">Teléfono de contacto secundario: {item.tel_contacto_secundario || 'N/A'}</p>
+              <p className="text-black dark:text-black">Teléfono de contacto principal: {item.tel_contacto_principal || 'N/A'}</p>
+            </div>
+            <div className='flex justify-center items-center p-2 cursor-pointer'>
+                <FaEdit className='text-2xl m-2 shrink-0 text-celeste hover:text-indigo-300 dark:text-celeste' />
+                <IoTrashSharp className='text-2xl m-2 shrink-0 text-red-500 hover:text-red-700 dark:text-red-500' />            </div>
           </div>
         ))}
       </div>
