@@ -39,7 +39,8 @@ export default function LoginPage() {
         const data = await response.json();
         console.log(data); 
         if(data.error || data.name === 'PrismaClientInitializationError'){
-          toast.error(data.error)
+          const errorMessage = data && data.error ? data.error : 'Error en la solicitud';
+          toast.error(errorMessage);
         }else{
           encryptAndSetLocalStorage('user', data)
           toast.success(LOGIN_SUCCESS_MESSAGE + ' ' + data.nombre)
