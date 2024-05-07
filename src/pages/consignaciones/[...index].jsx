@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import useHasMounted from '../../hooks/useHasMounted';
+import { Cards } from '../../components/globals/Cards';
 
 const consignaciones = () => {
 
@@ -22,7 +23,10 @@ const consignaciones = () => {
   return (
     <>
     {hasMounted && (
-      <div className="mb-2 text-2xl font-bold tracking-tight text-black dark:text-black">Consignaciones</div>
+      <div className="mb-2 text-2xl font-bold tracking-tight text-black dark:text-black">
+        Consignaciones
+        <Cards/>
+      </div>
     )}
     </>
   )
