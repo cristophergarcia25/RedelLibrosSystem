@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 import { Modals } from './Modals';
 import { toast } from 'react-toastify';
 
-export const Cards = ({ items, reloadList= false }) => {
+export const Cards = ({ items=[], reloadList= false }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
 
@@ -13,7 +13,7 @@ export const Cards = ({ items, reloadList= false }) => {
   };
 
   useEffect(() => {
-    const filtered = items.filter(item => {
+    const filtered = items?.filter(item => {
       const values = Object.values(item).map(value =>
         typeof value === 'string' ? removeAccents(value).toLowerCase() : value
       );

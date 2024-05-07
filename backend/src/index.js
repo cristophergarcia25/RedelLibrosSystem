@@ -13,7 +13,7 @@ const app = express();
 // Middleware para habilitar CORS
 app.use((req, res, next) => {
   // Permitir el acceso desde todos los orígenes
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   // Permitir los métodos de solicitud que desees
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   // Permitir los encabezados que desees

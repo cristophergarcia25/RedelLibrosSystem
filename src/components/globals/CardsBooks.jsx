@@ -16,7 +16,7 @@ export const CardsBooks = ({ items, reloadList= false,  }) => {
 
 useEffect(() => {
     
-    const filtered = items.filter(book => {
+    const filtered = items?.filter(book => {
         const title = removeAccents(book.titulo).toLowerCase();
         const isbn = String(book.isbn); // Convertir el ISBN a string
         const searchTermLower = removeAccents(searchTerm).toLowerCase();
