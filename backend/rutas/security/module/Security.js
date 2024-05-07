@@ -21,6 +21,14 @@ export class Security {
           email: params.email,
           contrasena: params.contrasena,
         },
+        select: {
+          id: true,
+          rol: true,
+          apellido: true,
+          nombre: true,
+          email: true,
+          contrasena: true,
+        },
       });
 
       if (!loginResponse)
