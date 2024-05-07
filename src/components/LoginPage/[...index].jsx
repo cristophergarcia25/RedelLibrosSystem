@@ -67,11 +67,11 @@ export default function LoginPage() {
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input id="email" name="email" type="email" autoComplete="email" required className="custom-input" placeholder="Email" />
+                <input id="email" name="email" type="email" autoComplete="email" required className="custom-input  text-gray-700" placeholder="Email"  />
             </div>
             <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input id="password" name="password" type="password" autoComplete="current-password" required className='custom-input' placeholder="Contraseña" />
+                <input id="password" name="password" type="password" autoComplete="current-password" required className='custom-input  text-gray-700' placeholder="Contraseña" />
             </div>
             <div>
                 <button type="submit" className='custom-button'>
