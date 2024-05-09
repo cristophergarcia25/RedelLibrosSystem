@@ -1,19 +1,20 @@
 {
+  
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
-    "server":"nodemon src/index.js"
+    "server": "nodemon dist/src/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^5.13.0",
     "express": "^4.19.2",
     "nodemon": "^3.1.0",
-    "prisma": "^5.13.0"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.11"
   }
 }
