@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { IAgregarInstitucionParams } from "./types";
+import {
+  IActualizarInstitucionParams,
+  IAgregarInstitucionParams,
+} from "./types";
 
 const prisma = new PrismaClient();
 
@@ -29,6 +32,45 @@ export class Institucion {
     }
   }
 
+  async actualizarInstitucion(params: IActualizarInstitucionParams) {
+    try {
+      const actualizarInstitucionResponse = await prisma.institucion.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          ...(params.nombre && { nombre: params.nombre }),
+          ...(params.contacto_principal && {
+            contacto_principal: params.contacto_principal,
+          }),
+          ...(params.tel_contacto_principal && {
+            tel_contacto_principal: params.tel_contacto_principal,
+          }),
+          ...(params.porcentaje_descuento && {
+            porcentaje_descuento: params.porcentaje_descuento,
+          }),
+          ...(params.contacto_secundario && {
+            contacto_secundario: params.contacto_secundario,
+          }),
+          ...(params.tel_contacto_secundario && {
+            tel_contacto_secundario: params.tel_contacto_secundario,
+          }),
+          ...(params.direccion && { direccion: params.direccion }),
+        },
+      });
+
+      if (!actualizarInstitucionResponse)
+        return {
+          error: "Institucion no actualizada",
+          detalle: "Hubo un error durante la actualizacion de la institucion",
+        };
+
+      return actualizarInstitucionResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async listarInstituciones() {
     try {
       const listadoInstituciones = await prisma.institucion.findMany({
@@ -51,6 +93,24 @@ export class Institucion {
         };
 
       return listadoInstituciones;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async borrarInstitucion(id: string) {
+    try {
+      const borrarInstitucionResponse = await prisma.institucion.delete({
+        where: { id: id },
+      });
+
+      if (borrarInstitucionResponse)
+        return {
+          error: "Institucion no eliminada",
+          detalle: "Hubo un problema al intentar eliminar la institucion",
+        };
+
+      return borrarInstitucionResponse;
     } catch (error) {
       return error;
     }
