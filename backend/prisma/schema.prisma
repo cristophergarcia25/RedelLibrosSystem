@@ -54,6 +54,7 @@ model inventario {
   titulo          String
   cantidad        Int
   precio_unitario Float
+  estado          String?
   consignaciones  consignaciones[]
 }
 

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ICrearUsuarioParams } from "./types";
+import { IActualizarUsuarioParams, ICrearUsuarioParams } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -26,6 +26,33 @@ export class Usuario {
       if (!crearResponse) throw "Error al crear un nuevo usuario";
 
       return crearResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async actualizarUsuario(params: IActualizarUsuarioParams) {
+    try {
+      const actualizarUsuarioResponse = await prisma.usuario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          ...(params.nombre && { nombre: params.nombre }),
+          ...(params.apellido && { apellido: params.apellido }),
+          ...(params.email && { email: params.email }),
+          ...(params.rol && { rol: params.rol }),
+          ...(params.contrasena && { contrasena: params.contrasena }),
+        },
+      });
+
+      if (!actualizarUsuarioResponse)
+        return {
+          error: "Usuario no actualizado",
+          detalle: "Hubo un problema actualizando el usuario",
+        };
+
+      return actualizarUsuarioResponse;
     } catch (error) {
       return error;
     }

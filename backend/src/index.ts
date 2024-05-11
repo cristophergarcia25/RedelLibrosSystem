@@ -2,12 +2,15 @@ import express, { NextFunction, Request, Response } from "express";
 import agregarInstitucion from "../rutas/instituciones/agregarInstitucion";
 import listarInstituciones from "../rutas/instituciones/listarInstituciones";
 import agregarLibro from "../rutas/inventario/agregarLibro";
+import actualizarLibro from "../rutas/inventario/actualizarLibro";
 import listarLibros from "../rutas/inventario/listarLibros";
 import obtenerLibro from "../rutas/inventario/obtenerLibro";
+import eliminarLibro from "../rutas/inventario/eliminarLibro";
 import loginApi from "../rutas/security/loginApi";
 import borrarUsuario from "../rutas/usuarios/borrarUsuario";
 import crearUsuario from "../rutas/usuarios/crearUsuario";
 import obtenerUsuario from "../rutas/usuarios/obtenerUsuario";
+import actualizarUsuario from "../rutas/usuarios/actualizarUsuario";
 const app = express();
 
 // Middleware para habilitar CORS
@@ -28,9 +31,12 @@ app.use(express.json());
 
 app.use("/", crearUsuario);
 app.use("/", obtenerUsuario);
+app.use("/", actualizarUsuario);
 app.use("/", borrarUsuario);
 app.use("/", loginApi);
 app.use("/", agregarLibro);
+app.use("/", actualizarLibro);
+app.use("/", eliminarLibro);
 app.use("/", listarLibros);
 app.use("/", obtenerLibro);
 app.use("/", agregarInstitucion);

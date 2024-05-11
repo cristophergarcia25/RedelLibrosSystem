@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IAgregarLibroParams } from "./types";
+import { IActualizarLibroParams, IAgregarLibroParams } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +13,7 @@ export class Inventario {
           isbn: params.isbn,
           precio_unitario: params.precio_unitario,
           titulo: params.titulo,
+          estado: "activo",
         },
       });
       if (!agregarLibroResponse)
@@ -22,6 +23,34 @@ export class Inventario {
         };
 
       return agregarLibroResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async actualizarLibro(params: IActualizarLibroParams) {
+    try {
+      const actualizarLibroResponse = await prisma.inventario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          ...(params.cantidad && { cantidad: params.cantidad }),
+          ...(params.editorial && { editorial: params.editorial }),
+          ...(params.precio_unitario && {
+            precio_unitario: params.precio_unitario,
+          }),
+          ...(params.titulo && { titulo: params.titulo }),
+        },
+      });
+
+      if (!actualizarLibroResponse)
+        return {
+          error: "Libro no actualizado",
+          detalle: "Hubo un problema actualizando el libro",
+        };
+
+      return actualizarLibroResponse;
     } catch (error) {
       return error;
     }

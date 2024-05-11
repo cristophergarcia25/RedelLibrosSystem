@@ -1,14 +1,13 @@
 import { Router } from "express";
-import { Usuario } from "./module/Usuario";
+import { Inventario } from "./module/Inventario.js";
 
 const router = Router();
 
-router.delete("/usuario/:id", async (req, res) => {
+router.delete("/inventario/libro/:id", async (req, res) => {
   try {
+    const inventario = new Inventario();
     const { id } = req.params;
-    const usuario = new Usuario();
-
-    const response = await usuario.borrarUsuario(id);
+    const response = await inventario.eliminarLibro(id);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);

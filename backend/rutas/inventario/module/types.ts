@@ -5,3 +5,11 @@ export interface IAgregarLibroParams {
   precio_unitario: number;
   titulo: string;
 }
+
+export interface IActualizarLibroParams {
+  id: string;
+  cantidad?: number;
+  editorial?: string;
+  precio_unitario?: number;
+  titulo?: string;
+}
