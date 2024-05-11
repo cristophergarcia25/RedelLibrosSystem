@@ -3,11 +3,11 @@ import { Inventario } from "./module/Inventario.js";
 
 const router = Router();
 
-router.get("/inventario/libro/:isbn", async (req, res) => {
+router.delete("/inventario/libro/:id", async (req, res) => {
   try {
     const inventario = new Inventario();
-    const { isbn } = req.params;
-    const response = await inventario.obtenerLibro(isbn);
+    const { id } = req.params;
+    const response = await inventario.eliminarLibro(id);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { Security } from "./module/Security.js";
+import SchemaValidator from "../../middleware/SchemaValidator";
 
 const router = Router();
 
-router.post("/login", async (req, res) => {
+router.post("/login", SchemaValidator("validate/login"), async (req, res) => {
   try {
     const security = new Security();
 
@@ -11,10 +12,8 @@ router.post("/login", async (req, res) => {
 
     const response = await security.login(params);
     res.status(200).json(response);
-    console.log(response);
   } catch (error) {
     res.status(500).json(error);
-    console.log(error);
   }
 });
 

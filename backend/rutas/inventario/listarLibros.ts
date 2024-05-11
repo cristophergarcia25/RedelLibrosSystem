@@ -9,10 +9,8 @@ router.get("/inventario/lista", async (req, res) => {
 
     const response = await inventario.listarLibros();
     res.status(200).json(response);
-    console.log(response);
   } catch (error) {
     res.status(500).json(error);
-    console.log(error);
   }
 });
 

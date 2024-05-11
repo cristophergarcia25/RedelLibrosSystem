@@ -3,11 +3,11 @@ import { Institucion } from "./module/Institucion.js";
 
 const router = Router();
 
-router.get("/instituciones/lista", async (req, res) => {
+router.patch("/institucion", async (req, res) => {
   try {
     const institucion = new Institucion();
 
-    const response = await institucion.listarInstituciones();
+    const response = await institucion.actualizarInstitucion(req.body);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);

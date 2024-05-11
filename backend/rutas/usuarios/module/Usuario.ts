@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ICrearUsuarioParams } from "./types";
+import { IActualizarUsuarioParams, ICrearUsuarioParams } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -31,6 +31,33 @@ export class Usuario {
     }
   }
 
+  async actualizarUsuario(params: IActualizarUsuarioParams) {
+    try {
+      const actualizarUsuarioResponse = await prisma.usuario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          ...(params.nombre && { nombre: params.nombre }),
+          ...(params.apellido && { apellido: params.apellido }),
+          ...(params.email && { email: params.email }),
+          ...(params.rol && { rol: params.rol }),
+          ...(params.contrasena && { contrasena: params.contrasena }),
+        },
+      });
+
+      if (!actualizarUsuarioResponse)
+        return {
+          error: "Usuario no actualizado",
+          detalle: "Hubo un problema actualizando el usuario",
+        };
+
+      return actualizarUsuarioResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
   /**
    * The function "obtenerUsuario" asynchronously retrieves a user from a database using the provided
    * ID and handles errors appropriately.
@@ -52,6 +79,22 @@ export class Usuario {
       if (!obtenerUsuarioResponse) throw "Error al crear un nuevo usuario";
 
       return obtenerUsuarioResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async borrarUsuario(id: string) {
+    try {
+      const borrarUsuarioResponse = await prisma.usuario.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!borrarUsuarioResponse) throw "Error al crear un nuevo usuario";
+
+      return borrarUsuarioResponse;
     } catch (error) {
       return error;
     }
