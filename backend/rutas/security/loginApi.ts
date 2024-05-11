@@ -12,10 +12,8 @@ router.post("/login", SchemaValidator("validate/login"), async (req, res) => {
 
     const response = await security.login(params);
     res.status(200).json(response);
-    console.log(response);
   } catch (error) {
     res.status(500).json(error);
-    console.log(error);
   }
 });
 

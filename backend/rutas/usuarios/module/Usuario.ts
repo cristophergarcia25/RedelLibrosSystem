@@ -56,4 +56,20 @@ export class Usuario {
       return error;
     }
   }
+
+  async borrarUsuario(id: string) {
+    try {
+      const borrarUsuarioResponse = await prisma.usuario.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!borrarUsuarioResponse) throw "Error al crear un nuevo usuario";
+
+      return borrarUsuarioResponse;
+    } catch (error) {
+      return error;
+    }
+  }
 }
