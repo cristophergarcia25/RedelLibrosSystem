@@ -52,6 +52,20 @@ export class Cotizacion {
           detalle_articulos: true,
         },
       });
-    } catch (error) {}
+      if (!listarCotizacionesResponse)
+        return {
+          success: false,
+          error: "No existen cotizaciones",
+          detalle: "Actualmente no existen cotizaciones",
+        };
+
+      return { success: true, data: listarCotizacionesResponse };
+    } catch (error) {
+      return {
+        success: false,
+        mensaje: "hubo un error durante la operacion",
+        error: error,
+      };
+    }
   }
 }
