@@ -93,8 +93,6 @@ const handleSearchChange = (event) => {
               } else if (data.name === 'PrismaClientValidationError') {
                 toast.error('Se reportó un error al agregar el libro');
               }
-              
-              
             } else {
               // Maneja errores de la API
               console.error('Error en la solicitud:', response.statusText);
