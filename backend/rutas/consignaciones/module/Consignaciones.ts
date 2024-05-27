@@ -59,6 +59,46 @@ export class Consignaciones {
     }
   }
 
+  async listarConsignaciones() {
+    try {
+      const listadoConsignaciones = await prisma.consignaciones.findMany({
+        select: {
+          id: true,
+          estado: true,
+          fecha: true,
+          institucion: {
+            select: {
+              nombre: true,
+              porcentaje_descuento: true,
+            },
+          },
+          inventario: {
+            select: {
+              isbn: true,
+              precio_unitario: true,
+              titulo: true,
+              editorial: true,
+            },
+          },
+        },
+      });
+      if (!listadoConsignaciones)
+        return {
+          success: false,
+          error: "No existen consignaciones",
+          detalle: "No se encontraron consignaciones actuales",
+        };
+
+      return { success: true, data: listadoConsignaciones };
+    } catch (error) {
+      return {
+        success: false,
+        mensaje: "Hubo un error durante la operacion",
+        error: error,
+      };
+    }
+  }
+
   private async verificarCantidad(id_libro: string, cantidad: number) {
     try {
       const verificarCantidadResponse = await prisma.inventario.findUnique({
