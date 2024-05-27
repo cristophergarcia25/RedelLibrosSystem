@@ -11,6 +11,8 @@ import borrarUsuario from "../rutas/usuarios/borrarUsuario";
 import crearUsuario from "../rutas/usuarios/crearUsuario";
 import obtenerUsuario from "../rutas/usuarios/obtenerUsuario";
 import actualizarUsuario from "../rutas/usuarios/actualizarUsuario";
+import crearConsignacion from "../rutas/consignaciones/crearConsignacion";
+
 const app = express();
 
 // Middleware para habilitar CORS
@@ -41,6 +43,7 @@ app.use("/", listarLibros);
 app.use("/", obtenerLibro);
 app.use("/", agregarInstitucion);
 app.use("/", listarInstituciones);
+app.use("/", crearConsignacion);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
