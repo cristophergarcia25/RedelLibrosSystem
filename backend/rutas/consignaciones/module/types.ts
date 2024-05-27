@@ -5,3 +5,8 @@ export interface ICrearConsignacionParams {
   id_usuario: string;
   id_institucion: string;
 }
+
+export interface IAprobarConsignacionParams {
+  id_consignacion: string;
+  id_usuario: string;
+}

@@ -13,6 +13,7 @@ import obtenerUsuario from "../rutas/usuarios/obtenerUsuario";
 import actualizarUsuario from "../rutas/usuarios/actualizarUsuario";
 import crearConsignacion from "../rutas/consignaciones/crearConsignacion";
 import listarConsignaciones from "../rutas/consignaciones/listarConsignaciones";
+import aprobarConsignacion from "../rutas/consignaciones/aprobarConsignacion";
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use("/", agregarInstitucion);
 app.use("/", listarInstituciones);
 app.use("/", crearConsignacion);
 app.use("/", listarConsignaciones);
+app.use("/", aprobarConsignacion);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);

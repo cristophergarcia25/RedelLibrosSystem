@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ICrearConsignacionParams } from "./types";
+import { IAprobarConsignacionParams, ICrearConsignacionParams } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -59,6 +59,45 @@ export class Consignaciones {
     }
   }
 
+  async aprobarConsignacion(params: IAprobarConsignacionParams) {
+    try {
+      const usuario = await this.verificarUsuario(params.id_usuario);
+
+      if ((usuario.success = false || !usuario.data))
+        return {
+          success: false,
+          error: usuario.error,
+          detalle: usuario.detalle,
+        };
+
+      if (usuario.data.rol !== "admin")
+        return {
+          success: false,
+          error: "Operacion denegada",
+          detalle:
+            "El usuario proveido no tiene los permisos para realizar esta operacion",
+        };
+      const aprobarConsignacionResponse = await prisma.consignaciones.update({
+        where: {
+          id: params.id_consignacion,
+          estado: "pendiente",
+        },
+        data: {
+          estado: "aprobado",
+        },
+      });
+
+      if (!aprobarConsignacionResponse)
+        return {
+          success: false,
+          error: "Consignacion no aprobada",
+          detalle: "Hubo un error durante la aprobacion de la consignacion",
+        };
+
+      return { success: true, data: aprobarConsignacionResponse };
+    } catch (error) {}
+  }
+
   async listarConsignaciones() {
     try {
       const listadoConsignaciones = await prisma.consignaciones.findMany({
@@ -90,6 +129,33 @@ export class Consignaciones {
         };
 
       return { success: true, data: listadoConsignaciones };
+    } catch (error) {
+      return {
+        success: false,
+        mensaje: "Hubo un error durante la operacion",
+        error: error,
+      };
+    }
+  }
+
+  private async verificarUsuario(id: string) {
+    try {
+      const usuario = await prisma.usuario.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!usuario)
+        return {
+          success: false,
+          error: "Usuario no encontrado",
+          detalle: "El usuario proveido no fue encontrado",
+        };
+      return {
+        success: true,
+        data: usuario,
+      };
     } catch (error) {
       return {
         success: false,
