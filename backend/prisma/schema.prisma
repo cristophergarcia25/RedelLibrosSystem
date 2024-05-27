@@ -54,6 +54,7 @@ model inventario {
   titulo          String
   cantidad        Int
   precio_unitario Float
+  estado          String?
   consignaciones  consignaciones[]
 }
 
@@ -72,7 +73,7 @@ model consignaciones {
 model factura {
   id             String              @id @default(auto()) @map("_id") @db.ObjectId
   fecha          DateTime            @default(now())
-  num_factura    Int
+  num_factura    String
   tipo_documento String
   institucion    institucion         @relation(fields: [id_institucion], references: [id])
   id_institucion String              @db.ObjectId
@@ -95,9 +96,9 @@ model cotizaciones {
 
 type detalle_articulos {
   id_inventario   String
-  cantidad        String
-  precio_unitario String
-  precio_total    String
+  cantidad        Int
+  precio_unitario Int
+  precio_total    Int
 }
 
 type aprobado_por {
