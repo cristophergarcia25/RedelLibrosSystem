@@ -32,6 +32,7 @@ export default function LoginPage() {
         },
         body: JSON.stringify(body)
       });
+      
       console.log(response)
       // Verifica si la solicitud fue exitosa
       if (response.ok) {

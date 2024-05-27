@@ -3,12 +3,12 @@ import { FaPlus, FaMinus, FaEdit } from 'react-icons/fa';
 import { Modals } from './Modals';
 import { toast } from 'react-toastify';
 
-export const TableBooks = ({ items, reloadList = false }) => {
+export const TableBooks = ({ items=[], reloadList = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredBooks, setFilteredBooks] = useState([]);
 
     useEffect(() => {
-        const filtered = items.filter(book => {
+        const filtered = items?.filter(book => {
             const title = book.titulo.toLowerCase();
             const isbn = String(book.isbn); // Convertir el ISBN a string
             const searchTermLower = searchTerm.toLowerCase();

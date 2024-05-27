@@ -38,11 +38,16 @@ const inventario = () => {
         const data = await response.json();
         console.log(data);
         if(response.status === 200){
-          if(data.length === 0){
-              toast.error('No hay libros registrados')
-              setItems([])
-            }
-            setItems(data)
+          if (data.error || data.name === 'PrismaClientInitializationError' || data.name === 'PrismaClientKnownRequestError') {
+            const errorMessage = data.error ? data.error : 'Error en la solicitud';
+            console.log(errorMessage);
+            toast.error('No hay libros registrados');
+            setItems([]);
+          } else {
+            console.log(data.name)
+            setItems(data);
+          }
+          
             
           }else{
           toast.error(data.error)
@@ -56,7 +61,9 @@ const inventario = () => {
     }
   }
 
-  useEffect(() => {}, [items]);
+  useEffect(() => {
+    console.log(items)
+  }, [items]);
 
   
   return (
