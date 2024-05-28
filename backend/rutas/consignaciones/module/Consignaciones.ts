@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { IAprobarConsignacionParams, ICrearConsignacionParams } from "./types";
+import {
+  IAprobarConsignacionParams,
+  ICrearConsignacionParams,
+  IDenegarConsignacionParams,
+} from "./types";
 
 const prisma = new PrismaClient();
 
@@ -31,7 +35,7 @@ export class Consignaciones {
         const crearConsignacion = await tx.consignaciones.create({
           data: {
             cantidad: params.cantidad,
-            estado: params.estado,
+            estado: "P",
             id_usuario: params.id_usuario,
             id_institucion: params.id_institucion,
             id_libro: params.id_libro,
@@ -80,10 +84,50 @@ export class Consignaciones {
       const aprobarConsignacionResponse = await prisma.consignaciones.update({
         where: {
           id: params.id_consignacion,
-          estado: "pendiente",
+          estado: "P",
         },
         data: {
-          estado: "aprobado",
+          estado: "A",
+        },
+      });
+
+      if (!aprobarConsignacionResponse)
+        return {
+          success: false,
+          error: "Consignacion no aprobada",
+          detalle: "Hubo un error durante la aprobacion de la consignacion",
+        };
+
+      return { success: true, data: aprobarConsignacionResponse };
+    } catch (error) {}
+  }
+
+  async denegarConsignacion(params: IDenegarConsignacionParams) {
+    try {
+      const usuario = await this.verificarUsuario(params.id_usuario);
+
+      if ((usuario.success = false || !usuario.data))
+        return {
+          success: false,
+          error: usuario.error,
+          detalle: usuario.detalle,
+        };
+
+      if (usuario.data.rol !== "admin")
+        return {
+          success: false,
+          error: "Operacion denegada",
+          detalle:
+            "El usuario proveido no tiene los permisos para realizar esta operacion",
+        };
+      const aprobarConsignacionResponse = await prisma.consignaciones.update({
+        where: {
+          id: params.id_consignacion,
+          estado: "P",
+        },
+        data: {
+          estado: "D",
+          detalle: params.detalle,
         },
       });
 
@@ -111,14 +155,7 @@ export class Consignaciones {
               porcentaje_descuento: true,
             },
           },
-          inventario: {
-            select: {
-              isbn: true,
-              precio_unitario: true,
-              titulo: true,
-              editorial: true,
-            },
-          },
+          inventario: true,
         },
       });
       if (!listadoConsignaciones)

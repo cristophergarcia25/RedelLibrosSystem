@@ -10,3 +10,14 @@ export interface IDetalleArticulos {
   precio_unitario: number;
   precio_total: number;
 }
+
+export interface IAprobarCotizacionParams {
+  id_cotizacion: string;
+  id_usuario: string;
+}
+
+export interface IDenegarCotizacionParams {
+  id_cotizacion: string;
+  id_usuario: string;
+  detalle: string;
+}

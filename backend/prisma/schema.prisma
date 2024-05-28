@@ -69,6 +69,7 @@ model consignaciones {
   cantidad       Int
   estado         String
   id_usuario     String
+  detalle        String?
   institucion    institucion @relation(fields: [id_institucion], references: [id])
   id_institucion String      @db.ObjectId
 }
@@ -106,6 +107,5 @@ type detalle_articulos {
 
 type aprobado_por {
   id_usuario       String
-  nombre           String
   fecha_aprobacion DateTime @default(now())
 }
