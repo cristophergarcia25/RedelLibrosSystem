@@ -5,6 +5,7 @@ const router = Router();
 
 router.patch("/inventario", async (req, res) => {
   try {
+    console.log(req.body);
     const inventario = new Inventario();
 
     const response = await inventario.actualizarLibro(req.body);
