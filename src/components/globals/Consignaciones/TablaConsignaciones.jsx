@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Modals } from '../Modals';
 import { MdCancel } from 'react-icons/md';
 
-export const TableCotizaciones = ({ items=[], reloadList = false }) => {
+export const TablaConsignaciones = ({ items=[], reloadList = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -175,12 +175,12 @@ useEffect(() => {
                             </div>
                         </form>
                     </div>
-                    {/* <button onClick={onOpenModal} className="flex items-center justify-center bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-800 text-white font-semibold py-1 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                    <button onClick={onOpenModal} className="flex items-center justify-center bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-600 hover:to-blue-800 text-white font-semibold py-1 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                         </svg>
                         <span className="text-lg">Nuevo</span>
-                    </button> */}
+                    </button>
                 </div>
 
                 <div>
@@ -198,58 +198,55 @@ useEffect(() => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aprobar-Denegar</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {currentItems.map((entry, index) => (
-            <React.Fragment key={index}>
-              <tr
-                onClick={() => handleRowClick(index)}
-                className={`cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
-              >
-                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.nombre}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.direccion}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.contacto_principal}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.tel_contacto_principal}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{new Date(entry.fecha).toLocaleDateString()}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{entry.estado}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{entry.id_usuario_solicita}</td>
-                <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
-                    <FaCheck onClick={onOpenModal2} className="text-green-500 cursor-pointer flex-shrink-0 w-5 h-5 mr-2" />
-                    <MdCancel onClick={onOpenModal3} className="text-red-500 cursor-pointer flex-shrink-0 w-5 h-5 ml-2" />
-                </td>
-              </tr>
-              {expandedRows.includes(index) && (
-                <tr className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-                  <td colSpan="7">
-                    <table className="min-w-full bg-gray-100 border-gray-200 divide-y divide-gray-200 mt-2">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Inventario</th>
-                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
-                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
-                          {/* <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th> */}
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {entry.detalle_articulos.map((articulo, idx) => (
-                <tr className={`${idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-                            <td className="px-6 py-4 whitespace-nowrap">{articulo.id_inventario}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{articulo.cantidad}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_unitario.toFixed(2)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_total.toFixed(2)}</td>
-                            {/* <td className="px-6 py-4 whitespace-nowrap text-center">
-                              <FaEdit className="text-blue-500 cursor-pointer" />
-                            </td> */}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </td>
+        <tbody className="bg-white divide-y divide-gray-200 text-sm">
+  {currentItems.map((entry, index) => (
+    <React.Fragment key={index}>
+      <tr
+        onClick={() => handleRowClick(index)}
+        className={`cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
+      >
+        <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.nombre}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.direccion}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.contacto_principal}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.tel_contacto_principal}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-center">{new Date(entry.fecha).toLocaleDateString()}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-center">{entry.estado === 'P' ? 'Pendiente': entry.estado === 'D'? 'Denegado': 'Autorizado'}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{entry.id_usuario_solicita}</td>
+        <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
+          <FaCheck onClick={onOpenModal2} className="text-green-500 cursor-pointer flex-shrink-0 w-5 h-5 mr-2" />
+          <MdCancel onClick={onOpenModal3} className="text-red-500 cursor-pointer flex-shrink-0 w-5 h-5 ml-2" />
+        </td>
+      </tr>
+      {expandedRows.includes(index) && (
+        <tr className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+          <td colSpan="8">
+            <table className="min-w-full bg-gray-100 border-gray-200 divide-y divide-gray-200 mt-2">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Inventario</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
                 </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                <tr className="bg-gray-100">
+                  <td className="px-6 py-4 whitespace-nowrap">{entry.inventario.titulo}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{entry.inventario.editorial}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{entry.inventario.isbn}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-center">{entry.inventario.cantidad}</td> */}
+                  <td className="px-6 py-4 whitespace-nowrap text-center">${entry.inventario.precio_unitario.toFixed(2)}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-center">${entry.inventario.precio_total.toFixed(2)}</td> */}
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
+  ))}
+</tbody>
+
       </table>
     </div>
       <div className="flex justify-between items-center mt-4">
@@ -298,29 +295,42 @@ useEffect(() => {
     </div>
             </div>
             <Modals
-                title='Ingresar Nuevo Libro' 
+                title='Ingresar Nueva Consignacion' 
                 opModal={isOpen} 
                 handleClose={(newValue)=> setIsOpen(newValue)} 
                 handleNewBook={(newValue) => handleNewBook()}
             >
                 <div className='grid grid-cols-2 gap-1'>
                     <div className="form-group">
-                        <label htmlFor="editorial">Editorial: <span className="text-red-500">*</span></label>
-                        <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="editorial" placeholder="Ingrese la editorial" required />
+                        <label htmlFor="cantidad">CANT/QTY: <span className="text-red-500">*</span></label>
+                        <input type="number" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="cantidad" placeholder="Ingrese la cantidad" required />
                     </div>
                     <div className="form-group">
                         <label htmlFor="isbn">ISBN: <span className="text-red-500">*</span></label>
-                        <input type="number" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="isbn" placeholder="Ingrese el ISBN" required />
+                        <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="isbn" placeholder="Ingrese el ISBN" required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="titulo">Título: <span className="text-red-500">*</span></label>
+                        <label htmlFor="titulo">TÍTULO/TITLE: <span className="text-red-500">*</span></label>
                         <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="titulo" placeholder="Ingrese el título" required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="precio_unitario">Precio Unitario: <span className="text-red-500">*</span></label>
-                        <input type="number" step="0.01" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="precio_unitario" placeholder="Ingrese el precio unitario" required />
+                        <label htmlFor="grado">grado: <span className="text-red-500">*</span></label>
+                        <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="grado" placeholder="Ingrese el grado" required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="precio_pvp">PRECIO PVP: <span className="text-red-500">*</span></label>
+                        <input type="number" step="0.01" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="precio_pvp" placeholder="Ingrese el precio PVP" required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="precio_neto">PRECIO NETO: <span className="text-red-500">*</span></label>
+                        <input type="number" step="0.01" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="precio_neto" placeholder="Ingrese el precio neto" required />
+                    </div>
+                    <div className="form-group col-span-2">
+                        <label htmlFor="total_neto_usd">TOTAL NETO USD: <span className="text-red-500">*</span></label>
+                        <input type="number" step="0.01" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="total_neto_usd" placeholder="Ingrese el total neto USD" required />
                     </div>
                 </div>
+
             </Modals>
             <Modals
                 title='Autorizar Cotización' 
@@ -328,7 +338,7 @@ useEffect(() => {
                 handleClose={(newValue)=> setIsOpen2(newValue)} 
                 handleNewBook={(newValue) => ''}
             >
-                ¿Desea autorizar esta cotización?
+                ¿Desea autorizar esta consignación?
                 {/* <div className='flex justify-center items-center'>
                     <button className='bg-emerald-600 px-2 py-1 text-white rounded-lg'>
                         Aceptar
@@ -344,7 +354,7 @@ useEffect(() => {
                 handleClose={(newValue)=> setIsOpen3(newValue)} 
                 handleNewBook={(newValue) => ''}
             >
-                ¿Desea denegar esta cotización?
+                ¿Desea denegar esta consignación?
                 <input type="textarea" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="editorial" placeholder="Ingrese ..." required />
             </Modals>
         </>
