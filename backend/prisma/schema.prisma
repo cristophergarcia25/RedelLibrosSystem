@@ -53,10 +53,10 @@ model inventario {
   editorial       String
   titulo          String
   cantidad        Int
-  precio_unitario String
-  total           String
-  costo_fob       String
-  total_fob       String
+  precio_unitario Float
+  total           Float
+  costo_fob       Float
+  total_fob       Float
   estado          String?
   consignaciones  consignaciones[]
 }

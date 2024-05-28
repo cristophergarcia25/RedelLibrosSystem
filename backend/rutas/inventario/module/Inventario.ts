@@ -6,20 +6,14 @@ const prisma = new PrismaClient();
 export class Inventario {
   async agregarLibro(params: IAgregarLibroParams) {
     try {
-      const precio = parseFloat(params.precio_unitario);
-      const costo = parseFloat(params.costo_fob);
-
-      const total = String(precio * params.cantidad);
-      const totalFob = String(costo * params.cantidad);
-
       const agregarLibroResponse = await prisma.inventario.create({
         data: {
           cantidad: params.cantidad,
           editorial: params.editorial,
           isbn: params.isbn,
           precio_unitario: params.precio_unitario,
-          total: total,
-          total_fob: totalFob,
+          total: params.precio_unitario * params.cantidad,
+          total_fob: params.costo_fob * params.cantidad,
           costo_fob: params.costo_fob,
           titulo: params.titulo,
           estado: "activo",
@@ -48,6 +42,9 @@ export class Inventario {
           ...(params.editorial && { editorial: params.editorial }),
           ...(params.precio_unitario && {
             precio_unitario: params.precio_unitario,
+          }),
+          ...(params.costo_fob && {
+            costo_fob: params.costo_fob,
           }),
           ...(params.titulo && { titulo: params.titulo }),
         },
@@ -146,8 +143,8 @@ export class Inventario {
           id: params.id,
         },
         data: {
-          total: String(parseFloat(params.precio_unitario) * params.cantidad),
-          total_fob: String(parseFloat(params.costo_fob) * params.cantidad),
+          total: params.precio_unitario * params.cantidad,
+          total_fob: params.costo_fob * params.cantidad,
         },
       });
       if (!actualizarTotalResponse)
