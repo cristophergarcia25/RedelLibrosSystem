@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaMinus, FaEdit } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaEdit, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Modals } from '../Modals';
+import { MdCancel } from 'react-icons/md';
 
 export const TableCotizaciones = ({ items=[], reloadList = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -81,10 +82,22 @@ useEffect(() => {
     };
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
 
     const onOpenModal = () => { 
         console.log('Modal abierto')
         setIsOpen(true);
+    }
+
+    const onOpenModal2 = () => { 
+        console.log('Modal abierto')
+        setIsOpen2(true);
+    }
+
+    const onOpenModal3 = () => { 
+        console.log('Modal abierto')
+        setIsOpen3(true);
     }
 
     const handleNewBook = async () => {
@@ -182,6 +195,7 @@ useEffect(() => {
             <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
             <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Usuario Solicita</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aprobar-Denegar</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -198,6 +212,10 @@ useEffect(() => {
                 <td className="px-6 py-4 whitespace-nowrap text-center">{new Date(entry.fecha).toLocaleDateString()}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">{entry.estado}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{entry.id_usuario_solicita}</td>
+                <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
+                    <FaCheck onClick={onOpenModal2} className="text-green-500 cursor-pointer flex-shrink-0 w-5 h-5 mr-2" />
+                    <MdCancel onClick={onOpenModal3} className="text-red-500 cursor-pointer flex-shrink-0 w-5 h-5 ml-2" />
+                </td>
               </tr>
               {expandedRows.includes(index) && (
                 <tr className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
@@ -209,19 +227,19 @@ useEffect(() => {
                           <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
                           <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
                           <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
-                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                          {/* <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th> */}
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {entry.detalle_articulos.map((articulo, idx) => (
-                          <tr key={idx}>
+                <tr className={`${idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
                             <td className="px-6 py-4 whitespace-nowrap">{articulo.id_inventario}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">{articulo.cantidad}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_unitario.toFixed(2)}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_total.toFixed(2)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                            {/* <td className="px-6 py-4 whitespace-nowrap text-center">
                               <FaEdit className="text-blue-500 cursor-pointer" />
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                       </tbody>
@@ -303,6 +321,30 @@ useEffect(() => {
                         <input type="number" step="0.01" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste" id="precio_unitario" placeholder="Ingrese el precio unitario" required />
                     </div>
                 </div>
+            </Modals>
+            <Modals
+                title='Autorizar Cotización' 
+                opModal={isOpen2} 
+                handleClose={(newValue)=> setIsOpen2(newValue)} 
+                handleNewBook={(newValue) => ''}
+            >
+                ¿Desea autorizar esta cotización?
+                <div className='flex justify-center items-center'>
+                    <button className='bg-emerald-600 px-2 py-1 text-white rounded-lg'>
+                        Aceptar
+                    </button>
+                    <button className='bg-red-600 px-2 py-1 text-white rounded-lg '>
+                        Cancelar
+                    </button>
+                </div>
+            </Modals>
+            <Modals
+                title='Denegar Cotización' 
+                opModal={isOpen3} 
+                handleClose={(newValue)=> setIsOpen3(newValue)} 
+                handleNewBook={(newValue) => ''}
+            >
+                ¿Desea denegar esta cotización?
             </Modals>
         </>
     );

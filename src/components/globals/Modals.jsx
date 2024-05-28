@@ -19,7 +19,7 @@ export const Modals = ({opModal, handleClose, title='',children, handleNewBook})
         </Modal.Body>
         <Modal.Footer className='flex justify-center '>
           <Button className='bg-celeste ' onClick={() => { handleNewBook(true)}}>
-            <RiCheckLine className="mr-2 shrink-0 w-6 h-6" /> Nuevo
+            <RiCheckLine className="mr-2 shrink-0 w-6 h-6" /> Aceptar
           </Button>
           <Button className='bg-red-500 text-white' color="red" onClick={() => { setOpenModal(false); handleClose(false)}}>
             <RiCloseLine className="mr-2 shrink-0 w-6 h-6" /> Cancelar
