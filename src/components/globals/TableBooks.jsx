@@ -6,16 +6,73 @@ import { toast } from 'react-toastify';
 export const TableBooks = ({ items=[], reloadList = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredBooks, setFilteredBooks] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [buttonsPerBlock] = useState(5);
+  // Calculate the range of items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    // Cambia 'currentItems' por 'filteredBooks'
+    const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
 
-    useEffect(() => {
-        const filtered = items?.filter(book => {
-            const title = book.titulo.toLowerCase();
-            const isbn = String(book.isbn); // Convertir el ISBN a string
-            const searchTermLower = searchTerm.toLowerCase();
-            return title.includes(searchTermLower) || isbn.includes(searchTermLower); // Buscar por título o ISBN
-        });
-        setFilteredBooks(filtered);
-    }, [searchTerm, items]);
+    // Puedes seguir usando 'items' para calcular el número total de páginas y otras lógicas del Paginator
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const currentBlock = Math.ceil(currentPage / buttonsPerBlock);
+    const startButtonIndex = (currentBlock - 1) * buttonsPerBlock + 1;
+    const endButtonIndex = Math.min(currentBlock * buttonsPerBlock, totalPages);
+
+  const filterBooks = (items, term) => {
+    return items.filter(book => {
+        const title = book.titulo.toLowerCase();
+        const isbn = String(book.isbn); // Convertir el ISBN a string
+        const searchTermLower = term.toLowerCase();
+        return title.includes(searchTermLower) || isbn.includes(searchTermLower); // Buscar por título o ISBN
+    });
+};
+
+// En el useEffect, actualiza los libros filtrados cuando cambie el término de búsqueda
+useEffect(() => {
+    console.log('searchTerm:', searchTerm);
+    const filtered = filterBooks(items, searchTerm);
+    console.log('filtered:', filtered);
+    setFilteredBooks(filtered);
+}, [items, searchTerm]);
+
+// Ahora, en lugar de usar 'currentItems' para el Paginator, usa 'filteredBooks'
+
+
+  // Functions to handle page changes
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleNextBlock = () => {
+    if (endButtonIndex < totalPages) {
+      setCurrentPage(endButtonIndex + 1);
+    }
+  };
+
+  const handlePreviousBlock = () => {
+    if (startButtonIndex > 1) {
+      setCurrentPage(startButtonIndex - buttonsPerBlock);
+    }
+  };
+
+
+
+    
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -89,7 +146,7 @@ export const TableBooks = ({ items=[], reloadList = false }) => {
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                     </svg>
                                 </div>
-                                <input type="search" id="default-search" className="block w-full p-2 ps-10 text-sm text-black border border-gris-claro rounded-lg  focus:ring-gris-oscuro focus:border-gris-oscuro  dark:border-gris-oscuro  dark:text-black dark:focus:ring-gris-oscuro dark:focus:border-gris-oscuro" placeholder="Buscar..." required value={searchTerm} onChange={handleSearchChange} />
+                                <input type="search" id="default-search" className="block w-full p-2 ps-10 text-sm text-black border border-gris-claro rounded-lg  focus:ring-gris-oscuro focus:border-gris-oscuro  dark:border-gris-oscuro  dark:text-black dark:focus:ring-gris-oscuro dark:focus:border-gris-oscuro" placeholder="Buscar..."  onChange={handleSearchChange} />
                             </div>
                         </form>
                     </div>
@@ -101,44 +158,89 @@ export const TableBooks = ({ items=[], reloadList = false }) => {
                     </button>
                 </div>
 
-                <div className='overflow-x-auto mt-4'>
-                    <table className="min-w-full bg-white border-gray-200 divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Editorial</th>
-                                <th scope="col" className=" px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                                <th scope="col" className="text-center px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
-                                <th scope="col" className="text-center px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {filteredBooks.map((book, index) => (
-                                <tr key={index}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{book.titulo}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{book.isbn}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{book.editorial}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                                        <div className="text-sm text-gray-900">{book.cantidad}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                                        <div className="text-sm text-gray-900">${book.precio_unitario.toFixed(2)}</div>
-                                    </td>
-                                    <td onClick={() => handleModalAmount(book)} className="px-6 py-4 whitespace-nowrap text-center flex justify-center">
-                                        <FaEdit className="text-blue-500 cursor-pointer" />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <div>
+      <div className='overflow-x-auto mt-4'>
+        <table className="min-w-full bg-white border-gray-200 divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Editorial</th>
+              <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+              <th scope="col" className="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
+              <th scope="col" className="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentItems.map((book, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">{book.titulo}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">{book.isbn}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">{book.editorial}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  <div className="text-sm text-gray-900">{book.cantidad}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {/* <div className="text-sm text-gray-900">${book.precio_unitario.toFixed(2)}</div> */}
+                </td>
+                <td onClick={() => handleModalAmount(book)} className="px-6 py-4 whitespace-nowrap text-center flex justify-center">
+                  <FaEdit className="text-blue-500 cursor-pointer" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+        <div className="flex">
+          {startButtonIndex > 1 && (
+            <button
+              onClick={handlePreviousBlock}
+              className="mx-1 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+            >
+              ...
+            </button>
+          )}
+          {Array.from({ length: endButtonIndex - startButtonIndex + 1 }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(startButtonIndex + index)}
+              className={`mx-1 px-4 py-2 ${currentPage === startButtonIndex + index ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} rounded`}
+            >
+              {startButtonIndex + index}
+            </button>
+          ))}
+          {endButtonIndex < totalPages && (
+            <button
+              onClick={handleNextBlock}
+              className="mx-1 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+            >
+              ...
+            </button>
+          )}
+        </div>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
             </div>
             <Modals 
                 title='Ingresar Nuevo Libro' 

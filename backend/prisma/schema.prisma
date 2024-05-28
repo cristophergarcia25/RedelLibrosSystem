@@ -49,11 +49,11 @@ model historial_operaciones {
 
 model inventario {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  isbn            String
-  editorial       String
-  titulo          String
-  cantidad        Int
-  precio_unitario Float
+  isbn            String?
+  editorial       String?
+  titulo          String?
+  cantidad        Int?
+  precio_unitario Float?
   estado          String?
   consignaciones  consignaciones[]
 }

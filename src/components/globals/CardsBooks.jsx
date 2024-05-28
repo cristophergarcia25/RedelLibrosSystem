@@ -7,24 +7,75 @@ import { IoTrashSharp } from 'react-icons/io5';
 
 
 export const CardsBooks = ({ items, reloadList= false,  }) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredBooks, setFilteredBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage] = useState(10);
+const [buttonsPerBlock] = useState(5);
+// Calculate the range of items to display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Cambia 'currentItems' por 'filteredBooks'
+  const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
 
-   // Función para eliminar las tildes de los caracteres acentuados
-   const removeAccents = (str) => {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  // Puedes seguir usando 'items' para calcular el número total de páginas y otras lógicas del Paginator
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const currentBlock = Math.ceil(currentPage / buttonsPerBlock);
+  const startButtonIndex = (currentBlock - 1) * buttonsPerBlock + 1;
+  const endButtonIndex = Math.min(currentBlock * buttonsPerBlock, totalPages);
+
+const filterBooks = (items, term) => {
+  return items.filter(book => {
+      const title = book.titulo.toLowerCase();
+      const isbn = String(book.isbn); // Convertir el ISBN a string
+      const searchTermLower = term.toLowerCase();
+      return title.includes(searchTermLower) || isbn.includes(searchTermLower); // Buscar por título o ISBN
+  });
 };
 
+// En el useEffect, actualiza los libros filtrados cuando cambie el término de búsqueda
 useEffect(() => {
-    
-    const filtered = items?.filter(book => {
-        const title = removeAccents(book.titulo).toLowerCase();
-        const isbn = String(book.isbn); // Convertir el ISBN a string
-        const searchTermLower = removeAccents(searchTerm).toLowerCase();
-        return title.includes(searchTermLower) || isbn.includes(searchTermLower); // Buscar por título o ISBN
-    });
-    setFilteredBooks(filtered);
-}, [searchTerm, items]);
+  console.log('searchTerm:', searchTerm);
+  const filtered = filterBooks(items, searchTerm);
+  console.log('filtered:', filtered);
+  setFilteredBooks(filtered);
+}, [items, searchTerm]);
+
+// Ahora, en lugar de usar 'currentItems' para el Paginator, usa 'filteredBooks'
+
+
+// Functions to handle page changes
+const handleNextPage = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+const handlePreviousPage = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
+
+const handlePageChange = (page) => {
+  setCurrentPage(page);
+};
+
+const handleNextBlock = () => {
+  if (endButtonIndex < totalPages) {
+    setCurrentPage(endButtonIndex + 1);
+  }
+};
+
+const handlePreviousBlock = () => {
+  if (startButtonIndex > 1) {
+    setCurrentPage(startButtonIndex - buttonsPerBlock);
+  }
+};
+
+const removeAccents = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
 
 const handleSearchChange = (event) => {
     const term = event.target.value;
@@ -131,7 +182,7 @@ const handleSearchChange = (event) => {
             </div>
 
                 <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-1 p-2'>
-                    {filteredBooks.map((book, index) => (
+                    {currentItems.map((book, index) => (
                         <div key={index} className="cursor-pointer text-base font-medium bg-gris-claro border border-gris-oscuro rounded-lg shadow dark:bg-gris-claro dark:border-gris-oscuro">
                             <div className="bg-celeste w-full rounded-t-lg flex justify-center items-center p-2">
                               <p title={book.titulo} className="text-xl truncate font-bold text-white">{book.titulo}</p>
@@ -140,15 +191,59 @@ const handleSearchChange = (event) => {
                               <p className="text-medium text-black dark:text-black">ISBN: {book.isbn}</p>
                               <p className="text-medium text-black dark:text-black">Editorial: {book.editorial}</p>
                               {/* <p className="text-medium text-black dark:text-black">Cantidad: {book.cantidad}</p> */}
-                              <p className="text-medium text-black dark:text-black">Precio Unitario: ${book.precio_unitario.toFixed(2)}</p>
+                              {/* <p className="text-medium text-black dark:text-black">Precio Unitario: ${book.precio_unitario.toFixed(2)}</p> */}
                             </div>
                             <div className='flex justify-center items-center p-2 cursor-pointer'>
                               <FaEdit className='text-2xl m-2 shrink-0 text-celeste hover:text-indigo-300 dark:text-celeste' />
-                              <IoTrashSharp className='text-2xl m-2 shrink-0 text-red-500 hover:text-red-700 dark:text-red-500' />
+                              {/* <IoTrashSharp className='text-2xl m-2 shrink-0 text-red-500 hover:text-red-700 dark:text-red-500' /> */}
                             </div>
                         </div>
                     ))}
                 </div>
+                <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+        <div className="flex">
+          {startButtonIndex > 1 && (
+            <button
+              onClick={handlePreviousBlock}
+              className="mx-1 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+            >
+              ...
+            </button>
+          )}
+          {Array.from({ length: endButtonIndex - startButtonIndex + 1 }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(startButtonIndex + index)}
+              className={`mx-1 px-4 py-2 ${currentPage === startButtonIndex + index ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} rounded`}
+            >
+              {startButtonIndex + index}
+            </button>
+          ))}
+          {endButtonIndex < totalPages && (
+            <button
+              onClick={handleNextBlock}
+              className="mx-1 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+            >
+              ...
+            </button>
+          )}
+        </div>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+        >
+          Siguiente
+        </button>
+      </div>
+                
             </div>
             <Modals 
             title='Ingresar Nuevo Libro' 
