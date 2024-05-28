@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaMinus, FaEdit } from 'react-icons/fa';
-import { Modals } from './Modals';
 import { toast } from 'react-toastify';
+import { Modals } from '../Modals';
 
-export const TableBooks = ({ items=[], reloadList = false }) => {
+export const TableCotizaciones = ({ items=[], reloadList = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,22 +23,24 @@ export const TableBooks = ({ items=[], reloadList = false }) => {
 
   const filterBooks = (items, term) => {
     return items.filter(book => {
-        const title = book.titulo.toLowerCase();
-        const isbn = String(book.isbn); // Convertir el ISBN a string
-        const searchTermLower = term.toLowerCase();
-        return title.includes(searchTermLower) || isbn.includes(searchTermLower); // Buscar por título o ISBN
+        const title = book?.titulo?.toLowerCase();
+        const isbn = String(book?.isbn); // Convertir el ISBN a string
+        const searchTermLower = term?.toLowerCase();
+        return title?.includes(searchTermLower) || isbn?.includes(searchTermLower); // Buscar por título o ISBN
     });
 };
 
 // En el useEffect, actualiza los libros filtrados cuando cambie el término de búsqueda
 useEffect(() => {
-    console.log('searchTerm:', searchTerm);
+    console.log(items)
     const filtered = filterBooks(items, searchTerm);
-    console.log('filtered:', filtered);
-    setFilteredBooks(filtered);
+    console.log(filtered)
+    if(filtered){
+        console.log(filtered)
+        setFilteredBooks(filtered);
+    }
 }, [items, searchTerm]);
 
-// Ahora, en lugar de usar 'currentItems' para el Paginator, usa 'filteredBooks'
 
 
   // Functions to handle page changes
@@ -133,6 +135,16 @@ useEffect(() => {
         console.log(valor)
     }
 
+    const [expandedRows, setExpandedRows] = useState([]);
+
+  const handleRowClick = (index) => {
+    if (expandedRows.includes(index)) {
+      setExpandedRows(expandedRows.filter((rowIndex) => rowIndex !== index));
+    } else {
+      setExpandedRows([...expandedRows, index]);
+    }
+  };
+
     return (
         <>
             <div className='p-2'>
@@ -159,44 +171,69 @@ useEffect(() => {
                 </div>
 
                 <div>
-      <div className='overflow-x-auto mt-4'>
-        <table className="min-w-full bg-white border-gray-200 divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Editorial</th>
-              <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-              <th scope="col" className="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
-              <th scope="col" className="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {currentItems.map((book, index) => (
-                <tr className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{book.titulo}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{book.isbn}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{book.editorial}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <div className="text-sm text-gray-900">{book.cantidad}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {/* <div className="text-sm text-gray-900">${book.precio_unitario.toFixed(2)}</div> */}
-                </td>
-                <td onClick={() => handleModalAmount(book)} className="px-6 py-4 whitespace-nowrap text-center flex justify-center">
-                  <FaEdit className="text-blue-500 cursor-pointer" />
-                </td>
+                <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border-gray-200 divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institución</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contacto Principal</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono Contacto Principal</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Usuario Solicita</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {currentItems.map((entry, index) => (
+            <React.Fragment key={index}>
+              <tr
+                onClick={() => handleRowClick(index)}
+                className={`cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
+              >
+                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.nombre}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.direccion}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.contacto_principal}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{entry.institucion.tel_contacto_principal}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{new Date(entry.fecha).toLocaleDateString()}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{entry.estado}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{entry.id_usuario_solicita}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              {expandedRows.includes(index) && (
+                <tr className={`${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+                  <td colSpan="7">
+                    <table className="min-w-full bg-gray-100 border-gray-200 divide-y divide-gray-200 mt-2">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Inventario</th>
+                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Unitario</th>
+                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Total</th>
+                          <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {entry.detalle_articulos.map((articulo, idx) => (
+                          <tr key={idx}>
+                            <td className="px-6 py-4 whitespace-nowrap">{articulo.id_inventario}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{articulo.cantidad}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_unitario.toFixed(2)}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">${articulo.precio_total.toFixed(2)}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                              <FaEdit className="text-blue-500 cursor-pointer" />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={handlePreviousPage}
@@ -242,7 +279,7 @@ useEffect(() => {
       </div>
     </div>
             </div>
-            <Modals 
+            <Modals
                 title='Ingresar Nuevo Libro' 
                 opModal={isOpen} 
                 handleClose={(newValue)=> setIsOpen(newValue)} 

@@ -44,8 +44,17 @@ const inventario = () => {
             toast.error('No hay libros registrados');
             setItems([]);
           } else {
-            console.log(data.name)
-            setItems(data);
+            const newData = data.filter(item => {
+              // Verifica si todos los campos, excepto 'cantidad', son nulos
+              const isEmpty = Object.values(item).every(value => value === null || value === '');
+              // Verifica si la cantidad es diferente de 0
+              const isNotZero = item.cantidad !== 0 || item.cantidad !== null;
+              // Retorna true si no todos los campos, excepto 'cantidad', son nulos y la cantidad no es 0
+              return !isEmpty || isNotZero;
+          });
+          
+          // Ahora 'newData' contiene solo los elementos que deseas mantener
+          setItems(newData);
           }
           
             
