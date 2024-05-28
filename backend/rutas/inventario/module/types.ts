@@ -4,6 +4,7 @@ export interface IAgregarLibroParams {
   isbn: string;
   precio_unitario: number;
   titulo: string;
+  costo_fob: number;
 }
 
 export interface IActualizarLibroParams {
@@ -12,4 +13,18 @@ export interface IActualizarLibroParams {
   editorial?: string;
   precio_unitario?: number;
   titulo?: string;
+  costo_fob?: number;
+}
+
+export interface ILibro {
+  id: string;
+  isbn: string;
+  editorial: string;
+  titulo: string;
+  cantidad: number;
+  precio_unitario: number;
+  total: number;
+  costo_fob: number;
+  total_fob: number;
+  estado: string | null;
 }

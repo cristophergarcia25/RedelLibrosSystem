@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { IActualizarLibroParams, IAgregarLibroParams } from "./types";
+import { IActualizarLibroParams, IAgregarLibroParams, ILibro } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -12,6 +12,9 @@ export class Inventario {
           editorial: params.editorial,
           isbn: params.isbn,
           precio_unitario: params.precio_unitario,
+          total: params.precio_unitario * params.cantidad,
+          total_fob: params.costo_fob * params.cantidad,
+          costo_fob: params.costo_fob,
           titulo: params.titulo,
           estado: "activo",
         },
@@ -40,6 +43,9 @@ export class Inventario {
           ...(params.precio_unitario && {
             precio_unitario: params.precio_unitario,
           }),
+          ...(params.costo_fob && {
+            costo_fob: params.costo_fob,
+          }),
           ...(params.titulo && { titulo: params.titulo }),
         },
       });
@@ -49,6 +55,9 @@ export class Inventario {
           error: "Libro no actualizado",
           detalle: "Hubo un problema actualizando el libro",
         };
+
+      if (params.precio_unitario || params.cantidad || params.costo_fob)
+        return await this.actualizarTotalVenta(actualizarLibroResponse);
 
       return actualizarLibroResponse;
     } catch (error) {
@@ -122,6 +131,30 @@ export class Inventario {
         };
 
       return eliminarLibroResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  private async actualizarTotalVenta(params: ILibro) {
+    try {
+      const actualizarTotalResponse = await prisma.inventario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          total: params.precio_unitario * params.cantidad,
+          total_fob: params.costo_fob * params.cantidad,
+        },
+      });
+      if (!actualizarTotalResponse)
+        return {
+          success: false,
+          error: "Error al actualizar el total",
+          detalle: "Hubo un error al actualizar el valor total del libro",
+        };
+
+      return actualizarTotalResponse;
     } catch (error) {
       return error;
     }
