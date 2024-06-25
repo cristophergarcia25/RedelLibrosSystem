@@ -12,10 +12,14 @@ export class Institucion {
       const agregarInstitucionResponse = await prisma.institucion.create({
         data: {
           contacto_principal: params.contacto_principal,
+          correo_contacto_principal: params.correo_contacto_principal,
+          cargo_contacto_principal: params.cargo_contacto_principal,
           direccion: params.direccion,
           nombre: params.nombre,
           tel_contacto_principal: params.tel_contacto_principal,
           contacto_secundario: params.contacto_secundario,
+          cargo_contacto_secundario: params.cargo_contacto_secundario,
+          correo_contacto_secundario: params.correo_contacto_secundario,
           tel_contacto_secundario: params.tel_contacto_secundario,
           porcentaje_descuento: params.porcentaje_descuento,
         },
@@ -43,6 +47,12 @@ export class Institucion {
           ...(params.contacto_principal && {
             contacto_principal: params.contacto_principal,
           }),
+          ...(params.cargo_contacto_principal && {
+            cargo_contacto_principal: params.cargo_contacto_principal,
+          }),
+          ...(params.correo_contacto_principal && {
+            correo_contacto_principal: params.correo_contacto_principal,
+          }),
           ...(params.tel_contacto_principal && {
             tel_contacto_principal: params.tel_contacto_principal,
           }),
@@ -51,6 +61,12 @@ export class Institucion {
           }),
           ...(params.contacto_secundario && {
             contacto_secundario: params.contacto_secundario,
+          }),
+          ...(params.cargo_contacto_secundario && {
+            cargo_contacto_secundario: params.cargo_contacto_secundario,
+          }),
+          ...(params.correo_contacto_secundario && {
+            correo_contacto_secundario: params.correo_contacto_secundario,
           }),
           ...(params.tel_contacto_secundario && {
             tel_contacto_secundario: params.tel_contacto_secundario,
@@ -83,6 +99,10 @@ export class Institucion {
           contacto_secundario: true,
           tel_contacto_secundario: true,
           tel_contacto_principal: true,
+          cargo_contacto_principal: true,
+          cargo_contacto_secundario: true,
+          correo_contacto_principal: true,
+          correo_contacto_secundario: true,
         },
       });
 

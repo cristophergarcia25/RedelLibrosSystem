@@ -72,7 +72,8 @@ export class Consignaciones {
 
       if (
         consignacionResponse?.data &&
-        consignacionResponse?.data?.id_libro !== params.id_libro
+        consignacionResponse?.data?.id_libro !== params.id_libro &&
+        params.id_libro
       ) {
         await this.reintegrarLibros(
           consignacionResponse.data.id_libro,
