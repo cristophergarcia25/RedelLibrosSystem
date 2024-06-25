@@ -24,17 +24,21 @@ model usuario {
 }
 
 model institucion {
-  id                      String           @id @default(auto()) @map("_id") @db.ObjectId
-  nombre                  String
-  direccion               String
-  contacto_principal      String
-  tel_contacto_principal  String
-  contacto_secundario     String?
-  tel_contacto_secundario String?
-  porcentaje_descuento    Float?
-  consignaciones          consignaciones[]
-  factura                 factura[]
-  cotizaciones            cotizaciones[]
+  id                         String           @id @default(auto()) @map("_id") @db.ObjectId
+  nombre                     String
+  direccion                  String
+  contacto_principal         String
+  cargo_contacto_principal   String
+  tel_contacto_principal     String
+  correo_contacto_principal  String
+  contacto_secundario        String?
+  cargo_contacto_secundario  String?
+  tel_contacto_secundario    String?
+  correo_contacto_secundario String?
+  porcentaje_descuento       Float?
+  consignaciones             consignaciones[]
+  factura                    factura[]
+  cotizaciones               cotizaciones[]
 }
 
 model historial_operaciones {

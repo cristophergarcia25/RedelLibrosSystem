@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {
+  IActualizarConsignacionParams,
   IAprobarConsignacionParams,
   ICrearConsignacionParams,
   IDenegarConsignacionParams,
@@ -61,6 +62,62 @@ export class Consignaciones {
         error: error,
       };
     }
+  }
+
+  async actualizarConsignacion(params: IActualizarConsignacionParams) {
+    try {
+      const consignacionResponse = await this.obtenerConsignacion(
+        params.id_consignacion
+      );
+
+      if (
+        consignacionResponse?.data &&
+        consignacionResponse?.data?.id_libro !== params.id_libro &&
+        params.id_libro
+      ) {
+        await this.reintegrarLibros(
+          consignacionResponse.data.id_libro,
+          consignacionResponse.data.cantidad
+        );
+        let cantidad;
+        params.cantidad
+          ? (cantidad = params.cantidad)
+          : (cantidad = consignacionResponse.data.cantidad);
+        await this.consignarLibros(params.id_libro, cantidad);
+      }
+
+      if (params.cantidad && consignacionResponse?.data) {
+        const nuevaCantidad = Math.abs(
+          consignacionResponse.data.cantidad - params.cantidad
+        );
+        await this.verificarCantidad(
+          consignacionResponse.data.id_libro,
+          nuevaCantidad
+        );
+      }
+
+      const actualizarConsignacion = await prisma.consignaciones.update({
+        where: {
+          id: params.id_consignacion,
+        },
+        data: {
+          ...(params.cantidad && { cantidad: params.cantidad }),
+          ...(params.id_institucion && {
+            id_institucion: params.id_institucion,
+          }),
+          ...(params.id_libro && { id_libro: params.id_libro }),
+          ...(params.id_usuario && { id_libro: params.id_usuario }),
+        },
+      });
+      if (!actualizarConsignacion)
+        return {
+          success: false,
+          error: "Consignacion no actualizada",
+          detalle: "Hubo un error al actualizar la consignacion",
+        };
+
+      return { success: true, data: actualizarConsignacion };
+    } catch (error) {}
   }
 
   async aprobarConsignacion(params: IAprobarConsignacionParams) {
@@ -142,6 +199,24 @@ export class Consignaciones {
     } catch (error) {}
   }
 
+  async obtenerConsignacion(id: string) {
+    try {
+      const consignacion = await prisma.consignaciones.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!consignacion)
+        return {
+          success: false,
+          error: "Consignacion no encontrada",
+          detalle: "La consignacion que esta tratando de consultar no existe",
+        };
+
+      return { success: true, data: consignacion };
+    } catch (error) {}
+  }
+
   async listarConsignaciones() {
     try {
       const listadoConsignaciones = await prisma.consignaciones.findMany({
@@ -200,6 +275,44 @@ export class Consignaciones {
         error: error,
       };
     }
+  }
+
+  private async reintegrarLibros(id: string, cantidad: number) {
+    try {
+      const reintegrarResponse = await prisma.inventario.update({
+        where: { id: id },
+        data: {
+          cantidad: { increment: cantidad },
+        },
+      });
+      if (!reintegrarResponse)
+        return {
+          success: false,
+          error: "Error de reintegracion",
+          detalle: "Hubo un error durante la reintegracion ",
+        };
+
+      return { success: true, data: reintegrarResponse };
+    } catch (error) {}
+  }
+
+  private async consignarLibros(id: string, cantidad: number) {
+    try {
+      const consignarResponse = await prisma.inventario.update({
+        where: { id: id },
+        data: {
+          cantidad: { decrement: cantidad },
+        },
+      });
+      if (!consignarResponse)
+        return {
+          success: false,
+          error: "Error de consignación",
+          detalle: "Hubo un error durante la consignación ",
+        };
+
+      return { success: true, data: consignarResponse };
+    } catch (error) {}
   }
 
   private async verificarCantidad(id_libro: string, cantidad: number) {
