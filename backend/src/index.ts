@@ -20,6 +20,8 @@ import crearCotizacion from "../rutas/cotizaciones/crearCotizacion";
 import listarCotizaciones from "../rutas/cotizaciones/listarCotizaciones";
 import aprobarCotizacion from "../rutas/cotizaciones/aprobarCotizacion";
 import denegarCotizacion from "../rutas/cotizaciones/denegarCotizacion";
+import crearRetaceo from "../rutas/retaceo/crearRetaceo";
+import crearProveedor from "../rutas/proveedor/crearProveedor";
 
 const app = express();
 
@@ -60,6 +62,8 @@ app.use("/", crearCotizacion);
 app.use("/", listarCotizaciones);
 app.use("/", aprobarCotizacion);
 app.use("/", denegarCotizacion);
+app.use("/", crearRetaceo);
+app.use("/", crearProveedor);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
