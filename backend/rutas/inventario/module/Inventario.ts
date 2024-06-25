@@ -75,6 +75,10 @@ export class Inventario {
           editorial: true,
           cantidad: true,
           precio_unitario: true,
+          estado: true,
+          costo_fob: true,
+          total: true,
+          total_fob: true,
         },
       });
 
@@ -102,6 +106,10 @@ export class Inventario {
           titulo: true,
           editorial: true,
           cantidad: true,
+          estado: true,
+          costo_fob: true,
+          total: true,
+          total_fob: true,
         },
       });
 
