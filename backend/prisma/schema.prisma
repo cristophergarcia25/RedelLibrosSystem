@@ -65,6 +65,26 @@ model inventario {
   consignaciones  consignaciones[]
 }
 
+model retaceo {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  fecha        DateTime
+  id_usuario   String
+  fac          String
+  proveedor    proveedor @relation(fields: [id_proveedor], references: [id])
+  id_proveedor String    @db.ObjectId
+  descripcion  String
+  parcial      Float
+}
+
+model proveedor {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  nombre    String
+  correo    String
+  direccion String
+  telefono  String
+  retaceo   retaceo[]
+}
+
 model consignaciones {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   fecha          DateTime    @default(now())
