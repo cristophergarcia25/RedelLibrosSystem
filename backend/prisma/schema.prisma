@@ -26,7 +26,10 @@ model usuario {
 model institucion {
   id                         String           @id @default(auto()) @map("_id") @db.ObjectId
   nombre                     String
+  nombre_factura             String
+  nit                        String
   direccion                  String
+  direccion_factura          String
   contacto_principal         String
   cargo_contacto_principal   String
   tel_contacto_principal     String
@@ -35,6 +38,8 @@ model institucion {
   cargo_contacto_secundario  String?
   tel_contacto_secundario    String?
   correo_contacto_secundario String?
+  registro                   String?
+  giro                       String?
   porcentaje_descuento       Float?
   consignaciones             consignaciones[]
   factura                    factura[]

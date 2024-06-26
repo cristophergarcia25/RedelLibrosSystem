@@ -1,4 +1,9 @@
 export interface IAgregarInstitucionParams {
+  nombre_factura: string;
+  direccion_factura: string;
+  nit: string;
+  registro?: string;
+  giro?: string;
   contacto_principal: string;
   correo_contacto_principal: string;
   cargo_contacto_principal: string;
@@ -14,6 +19,11 @@ export interface IAgregarInstitucionParams {
 
 export interface IActualizarInstitucionParams {
   id: string;
+  nombre_factura?: string;
+  direccion_factura?: string;
+  nit?: string;
+  registro?: string;
+  giro?: string;
   contacto_principal?: string;
   correo_contacto_principal: string;
   cargo_contacto_principal: string;
