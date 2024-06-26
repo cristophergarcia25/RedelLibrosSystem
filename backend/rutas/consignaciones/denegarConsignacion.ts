@@ -3,7 +3,7 @@ import { Consignaciones } from "./module/Consignaciones.js";
 
 const router = Router();
 
-router.patch("/consignaciones/denegar", async (req, res) => {
+router.put("/consignaciones/denegar", async (req, res) => {
   try {
     const consignaciones = new Consignaciones();
 

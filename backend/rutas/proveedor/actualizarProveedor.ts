@@ -3,7 +3,7 @@ import { Proveedor } from "./modules/Proveedor";
 
 const router = Router();
 
-router.patch("/proveedor", async (req, res) => {
+router.put("/proveedor", async (req, res) => {
   try {
     const proveedor = new Proveedor();
 

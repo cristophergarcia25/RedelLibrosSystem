@@ -3,7 +3,7 @@ import { Inventario } from "./module/Inventario.js";
 
 const router = Router();
 
-router.patch("/inventario", async (req, res) => {
+router.put("/inventario", async (req, res) => {
   try {
     console.log(req.body);
     const inventario = new Inventario();
