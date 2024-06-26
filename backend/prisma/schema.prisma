@@ -67,7 +67,7 @@ model inventario {
 
 model retaceo {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  fecha        DateTime
+  fecha        String
   id_usuario   String
   fac          String
   proveedor    proveedor @relation(fields: [id_proveedor], references: [id])
