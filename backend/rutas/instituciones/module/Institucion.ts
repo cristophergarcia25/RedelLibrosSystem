@@ -15,6 +15,11 @@ export class Institucion {
           correo_contacto_principal: params.correo_contacto_principal,
           cargo_contacto_principal: params.cargo_contacto_principal,
           direccion: params.direccion,
+          direccion_factura: params.direccion_factura,
+          giro: params.giro,
+          nit: params.nit,
+          nombre_factura: params.nombre_factura,
+          registro: params.registro,
           nombre: params.nombre,
           tel_contacto_principal: params.tel_contacto_principal,
           contacto_secundario: params.contacto_secundario,
@@ -72,6 +77,15 @@ export class Institucion {
             tel_contacto_secundario: params.tel_contacto_secundario,
           }),
           ...(params.direccion && { direccion: params.direccion }),
+          ...(params.nombre_factura && {
+            nombre_factura: params.nombre_factura,
+          }),
+          ...(params.direccion_factura && {
+            direccion_factura: params.direccion_factura,
+          }),
+          ...(params.registro && { registro: params.registro }),
+          ...(params.giro && { giro: params.giro }),
+          ...(params.nit && { nit: params.nit }),
         },
       });
 
@@ -103,6 +117,11 @@ export class Institucion {
           cargo_contacto_secundario: true,
           correo_contacto_principal: true,
           correo_contacto_secundario: true,
+          nombre_factura: true,
+          direccion_factura: true,
+          giro: true,
+          nit: true,
+          registro: true,
         },
       });
 
