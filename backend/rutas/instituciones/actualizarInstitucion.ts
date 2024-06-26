@@ -3,7 +3,7 @@ import { Institucion } from "./module/Institucion.js";
 
 const router = Router();
 
-router.patch("/institucion", async (req, res) => {
+router.put("/institucion", async (req, res) => {
   try {
     const institucion = new Institucion();
 

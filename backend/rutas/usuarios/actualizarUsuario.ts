@@ -3,7 +3,7 @@ import { Usuario } from "./module/Usuario";
 
 const router = Router();
 
-router.patch("/usuario", async (req, res) => {
+router.put("/usuario", async (req, res) => {
   try {
     const usuario = new Usuario();
 

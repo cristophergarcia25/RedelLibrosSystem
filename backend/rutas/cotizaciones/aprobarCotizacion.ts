@@ -3,7 +3,7 @@ import { Cotizacion } from "./module/Cotizacion.js";
 
 const router = Router();
 
-router.patch("/cotizacion/aprobar", async (req, res) => {
+router.put("/cotizacion/aprobar", async (req, res) => {
   try {
     const cotizaciones = new Cotizacion();
 
