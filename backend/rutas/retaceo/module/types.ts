@@ -5,3 +5,12 @@ export interface ICrearRetaceoParams {
   descripcion: string;
   parcial: number;
 }
+
+export interface IActualizarRetaceoParams {
+  id: string;
+  id_usuario?: string;
+  fac?: string;
+  id_proveedor?: string;
+  descripcion?: string;
+  parcial?: number;
+}
