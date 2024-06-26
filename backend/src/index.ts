@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import agregarInstitucion from "../rutas/instituciones/agregarInstitucion";
+import actualizarInstitucion from "../rutas/instituciones/actualizarInstitucion";
+import borrarInstitucion from "../rutas/instituciones/borrarInstitucion";
 import listarInstituciones from "../rutas/instituciones/listarInstituciones";
 import agregarLibro from "../rutas/inventario/agregarLibro";
 import actualizarLibro from "../rutas/inventario/actualizarLibro";
@@ -22,6 +24,9 @@ import aprobarCotizacion from "../rutas/cotizaciones/aprobarCotizacion";
 import denegarCotizacion from "../rutas/cotizaciones/denegarCotizacion";
 import crearRetaceo from "../rutas/retaceo/crearRetaceo";
 import crearProveedor from "../rutas/proveedor/crearProveedor";
+import actualizarProveedor from "../rutas/proveedor/actualizarProveedor";
+import borrarProveedor from "../rutas/proveedor/borrarProveedor";
+import listarProveedores from "../rutas/proveedor/listarProveedores";
 
 const app = express();
 
@@ -52,6 +57,7 @@ app.use("/", eliminarLibro);
 app.use("/", listarLibros);
 app.use("/", obtenerLibro);
 app.use("/", agregarInstitucion);
+app.use("/", actualizarInstitucion);
 app.use("/", listarInstituciones);
 app.use("/", crearConsignacion);
 app.use("/", actualizarConsignacion);
@@ -64,6 +70,9 @@ app.use("/", aprobarCotizacion);
 app.use("/", denegarCotizacion);
 app.use("/", crearRetaceo);
 app.use("/", crearProveedor);
+app.use("/", actualizarProveedor);
+app.use("/", listarProveedores);
+app.use("/", borrarProveedor);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
