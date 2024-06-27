@@ -6,13 +6,13 @@ const prisma = new PrismaClient();
 
 export class Historial {
   async agregarHistorial(params: IHistorialParams) {
+    console.log("Agregando");
     try {
       const date = new Date();
       const agregarHistorialResponse =
         await prisma.historial_operaciones.create({
           data: {
             accion: params.accion,
-            detalle: params.detalle,
             id_usuario: params.id_usuario,
             fecha: date.toLocaleString(),
             recurso: params.recurso,
@@ -35,7 +35,6 @@ export class Historial {
           select: {
             id: true,
             accion: true,
-            detalle: true,
             fecha: true,
             usuario: true,
             recurso: true,

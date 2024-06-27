@@ -47,13 +47,12 @@ model institucion {
 }
 
 model historial_operaciones {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   accion     String
-  fecha      DateTime
-  usuario    usuario  @relation(fields: [id_usuario], references: [id])
-  id_usuario String   @db.ObjectId
-  recurso    String
-  detalle    String
+  fecha      String
+  usuario    usuario @relation(fields: [id_usuario], references: [id])
+  id_usuario String  @db.ObjectId
+  recurso    recurso
 }
 
 model inventario {
@@ -136,4 +135,9 @@ type detalle_articulos {
 type aprobado_por {
   id_usuario       String
   fecha_aprobacion DateTime @default(now())
+}
+
+type recurso {
+  recurso    String
+  id_recurso String
 }

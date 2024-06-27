@@ -1,12 +1,16 @@
 import { PrismaClient } from "@prisma/client";
+import { Historial } from "../../historial/module/Historial";
 import {
   IActualizarConsignacionParams,
   IAprobarConsignacionParams,
   ICrearConsignacionParams,
   IDenegarConsignacionParams,
 } from "./types";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { Result } from "../../../utils/result";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 export class Consignaciones {
   async crearConsignacion(params: ICrearConsignacionParams) {
@@ -51,10 +55,18 @@ export class Consignaciones {
 
       if (!transaction) throw "Error al crear la consignacion";
 
-      return {
-        success: true,
-        data: transaction,
-      };
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: transaction.id,
+        },
+      });
+
+      if (historialResponse?.success === false) throw historialResponse.error;
+
+      return Result.success(transaction);
     } catch (error) {
       return {
         success: false,

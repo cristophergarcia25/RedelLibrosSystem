@@ -28,6 +28,7 @@ import crearProveedor from "../rutas/proveedor/crearProveedor";
 import actualizarProveedor from "../rutas/proveedor/actualizarProveedor";
 import borrarProveedor from "../rutas/proveedor/borrarProveedor";
 import listarProveedores from "../rutas/proveedor/listarProveedores";
+import listarHistorial from "../rutas/historial/listarHistorial";
 
 const app = express();
 
@@ -76,6 +77,7 @@ app.use("/", crearProveedor);
 app.use("/", actualizarProveedor);
 app.use("/", listarProveedores);
 app.use("/", borrarProveedor);
+app.use("/", listarHistorial);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
