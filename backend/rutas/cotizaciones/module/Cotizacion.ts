@@ -114,7 +114,7 @@ export class Cotizacion {
         accion: EAccionHistorial.DENEGADO,
         id_usuario: denegarCotizacionResponse.id_usuario_solicita,
         recurso: {
-          recurso: ERecursos.CONSIGNACION,
+          recurso: ERecursos.COTIZACION,
           id_recurso: denegarCotizacionResponse.id,
         },
       });
