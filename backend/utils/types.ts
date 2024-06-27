@@ -9,6 +9,8 @@ export enum EAccionHistorial {
   CREATE = "Create",
   UPDATE = "Update",
   DELETE = "Delete",
+  APROBADO = "Aprobado",
+  DENEGADO = "Denegado",
 }
 
 export enum ERecursos {

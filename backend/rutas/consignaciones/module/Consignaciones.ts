@@ -128,6 +128,17 @@ export class Consignaciones {
           detalle: "Hubo un error al actualizar la consignacion",
         };
 
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.UPDATE,
+        id_usuario: actualizarConsignacion.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: actualizarConsignacion.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
+
       return { success: true, data: actualizarConsignacion };
     } catch (error) {}
   }
@@ -166,6 +177,17 @@ export class Consignaciones {
           error: "Consignacion no aprobada",
           detalle: "Hubo un error durante la aprobacion de la consignacion",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.APROBADO,
+        id_usuario: aprobarConsignacionResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: aprobarConsignacionResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: aprobarConsignacionResponse };
     } catch (error) {}
@@ -206,7 +228,16 @@ export class Consignaciones {
           error: "Consignacion no aprobada",
           detalle: "Hubo un error durante la aprobacion de la consignacion",
         };
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.DENEGADO,
+        id_usuario: aprobarConsignacionResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: aprobarConsignacionResponse.id,
+        },
+      });
 
+      if (historialResponse?.error) throw historialResponse.detalle;
       return { success: true, data: aprobarConsignacionResponse };
     } catch (error) {}
   }
