@@ -4,13 +4,48 @@
 
 
 .custom-input {
-  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-celeste focus:border-celeste block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-celeste dark:focus:border-celeste;
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-musgo focus:border-musgo block w-full p-1.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-musgo dark:focus:border-musgo;
 }
 
 .custom-button {
-  @apply w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-celeste hover:bg-celeste focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-celeste;
+  @apply w-full flex justify-center py-1.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-800 bg-orange-300 hover:bg-orange-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-musgo;
 }
 
+.custom-modal-bg .modal {
+  background-color: #f0f0f0;
+}
+
+.bg-color-yellow {
+  @apply bg-yellow-500;
+}
+
+.text-color-yellow {
+  @apply text-yellow-500;
+}
+
+.bg-color-green {
+  @apply bg-green-600;
+}
+
+.text-color-yellow {
+  @apply text-green-600;
+}
+
+.bg-color-gray {
+  @apply bg-gray-200;
+}
+
+.text-color-gray {
+  @apply text-gray-200;
+}
+
+.bg-color-gray-o {
+  @apply bg-gray-800;
+}
+
+.text-color-gray-o {
+  @apply text-gray-800;
+}
 
 
 

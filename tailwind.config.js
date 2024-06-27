@@ -17,7 +17,9 @@ module.exports = {
         'azul': '#3543C4',
         'celeste': '#525CEB',
         'gris-claro': '#DBDBDD',
-        'gris-oscuro': '#EFEFEF'
+        'gris-oscuro': '#EFEFEF',
+        'musgo': '#16a34a',
+        'amarillo': '#D2B55B',
       }
     },
   },

@@ -59,19 +59,19 @@ export default function LoginPage() {
  
   return (
     <>
-    <div className='grid md:grid-cols-2 gap-1'>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+    <div className='grid md:grid-cols-2 gap-1 bg-color-gray text-color-gray-o'>
+      <div className="min-h-screen flex items-center justify-center bg-color-gray py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-sm w-full space-y-8">
             <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Iniciar sesión</h2>
+            <h2 className="mt-6 text-center text-2xl font-extrabold text-color-gray-o">Iniciar sesión</h2>
             </div>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input id="email" name="email" type="email" autoComplete="email" required className="custom-input  text-gray-700" placeholder="Email"  />
+                <label htmlFor="email" className="block text-sm font-medium text-color-gray-o">Email</label>
+                <input id="email" name="email" type="email" autoComplete="email" required className="custom-input  text-color-gray-o" placeholder="Email"  />
             </div>
             <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
+                <label htmlFor="password" className="block text-sm font-medium text-color-gray-o">Contraseña</label>
                 <input id="password" name="password" type="password" autoComplete="current-password" required className='custom-input  text-gray-700' placeholder="Contraseña" />
             </div>
             <div>
@@ -82,7 +82,7 @@ export default function LoginPage() {
             </form>
         </div>
       </div>
-      <div className='hidden md:flex md:justify-center md:items-center bg-celeste'>
+      <div className='hidden md:flex md:justify-center md:items-center bg-color-green'>
         <img  src="/logoblanco.png" alt='login' className="w-96 h-64" />
       </div>
     </div>
