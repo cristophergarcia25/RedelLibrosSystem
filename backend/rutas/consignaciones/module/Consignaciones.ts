@@ -1,12 +1,16 @@
 import { PrismaClient } from "@prisma/client";
+import { Historial } from "../../historial/module/Historial";
 import {
   IActualizarConsignacionParams,
   IAprobarConsignacionParams,
   ICrearConsignacionParams,
   IDenegarConsignacionParams,
 } from "./types";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { Result } from "../../../utils/result";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 export class Consignaciones {
   async crearConsignacion(params: ICrearConsignacionParams) {
@@ -51,10 +55,18 @@ export class Consignaciones {
 
       if (!transaction) throw "Error al crear la consignacion";
 
-      return {
-        success: true,
-        data: transaction,
-      };
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: transaction.id,
+        },
+      });
+
+      if (historialResponse?.success === false) throw historialResponse.error;
+
+      return Result.success(transaction);
     } catch (error) {
       return {
         success: false,
@@ -116,6 +128,17 @@ export class Consignaciones {
           detalle: "Hubo un error al actualizar la consignacion",
         };
 
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.UPDATE,
+        id_usuario: actualizarConsignacion.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: actualizarConsignacion.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
+
       return { success: true, data: actualizarConsignacion };
     } catch (error) {}
   }
@@ -154,6 +177,17 @@ export class Consignaciones {
           error: "Consignacion no aprobada",
           detalle: "Hubo un error durante la aprobacion de la consignacion",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.APROBADO,
+        id_usuario: aprobarConsignacionResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: aprobarConsignacionResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: aprobarConsignacionResponse };
     } catch (error) {}
@@ -194,7 +228,16 @@ export class Consignaciones {
           error: "Consignacion no aprobada",
           detalle: "Hubo un error durante la aprobacion de la consignacion",
         };
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.DENEGADO,
+        id_usuario: aprobarConsignacionResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.CONSIGNACION,
+          id_recurso: aprobarConsignacionResponse.id,
+        },
+      });
 
+      if (historialResponse?.error) throw historialResponse.detalle;
       return { success: true, data: aprobarConsignacionResponse };
     } catch (error) {}
   }

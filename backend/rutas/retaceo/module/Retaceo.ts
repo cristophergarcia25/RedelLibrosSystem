@@ -1,7 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { IActualizarRetaceoParams, ICrearRetaceoParams } from "./types";
+import { Historial } from "../../historial/module/Historial";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 export class Retaceo {
   async crearRetaceo(params: ICrearRetaceoParams) {
@@ -24,6 +27,17 @@ export class Retaceo {
           error: "Retaceo no creado",
           detalle: "Hubo un error al crear el retaceo",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: crearRetaceoResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.RETACEO,
+          id_recurso: crearRetaceoResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: crearRetaceoResponse };
     } catch (error) {
@@ -52,6 +66,17 @@ export class Retaceo {
           detalle: "Hubo un error al actualizar el retaceo",
         };
 
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.UPDATE,
+        id_usuario: actualizarRetaceoResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.RETACEO,
+          id_recurso: actualizarRetaceoResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
+
       return { success: true, data: actualizarRetaceoResponse };
     } catch (error) {
       return { success: false, error: error };
@@ -72,6 +97,17 @@ export class Retaceo {
           error: "Retaceo no eliminado",
           detalle: "Hubo un error al eliminar el retaceo",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.DELETE,
+        id_usuario: borrarRetaceoResponse.id_usuario,
+        recurso: {
+          recurso: ERecursos.RETACEO,
+          id_recurso: borrarRetaceoResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: borrarRetaceoResponse };
     } catch (error) {}

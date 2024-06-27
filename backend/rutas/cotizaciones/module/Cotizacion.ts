@@ -5,8 +5,11 @@ import {
   IDenegarCotizacionParams,
   IDetalleArticulos,
 } from "./types";
+import { Historial } from "../../historial/module/Historial";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 export class Cotizacion {
   async crearCotizacion(params: ICrearCotizacionParams) {
@@ -25,6 +28,17 @@ export class Cotizacion {
           error: "Cotizacion no creada",
           detalle: "Ocurrio un error al crear la cotizacion",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: crearCotizacionResponse.id_usuario_solicita,
+        recurso: {
+          recurso: ERecursos.COTIZACION,
+          id_recurso: crearCotizacionResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: crearCotizacionResponse };
     } catch (error) {
@@ -58,6 +72,17 @@ export class Cotizacion {
           detalle: "Ocurrio un error al aceptar la cotizacion",
         };
 
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.APROBADO,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.COTIZACION,
+          id_recurso: aprobarCotizacionResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
+
       return { success: true, data: aprobarCotizacionResponse };
     } catch (error) {
       return {
@@ -84,6 +109,17 @@ export class Cotizacion {
           error: "Cotizacion no aceptada",
           detalle: "Ocurrio un error al aceptar la cotizacion",
         };
+
+      const historialResponse = await historial.agregarHistorial({
+        accion: EAccionHistorial.DENEGADO,
+        id_usuario: denegarCotizacionResponse.id_usuario_solicita,
+        recurso: {
+          recurso: ERecursos.COTIZACION,
+          id_recurso: denegarCotizacionResponse.id,
+        },
+      });
+
+      if (historialResponse?.error) throw historialResponse.detalle;
 
       return { success: true, data: denegarCotizacionResponse };
     } catch (error) {
