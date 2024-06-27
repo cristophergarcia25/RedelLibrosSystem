@@ -49,7 +49,7 @@ model institucion {
 model historial_operaciones {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   accion     String
-  fecha      DateTime @default(now())
+  fecha      DateTime
   usuario    usuario  @relation(fields: [id_usuario], references: [id])
   id_usuario String   @db.ObjectId
   recurso    String
@@ -131,7 +131,6 @@ type detalle_articulos {
   id_inventario   String
   cantidad        Int
   precio_unitario Int
-  precio_total    Int
 }
 
 type aprobado_por {
