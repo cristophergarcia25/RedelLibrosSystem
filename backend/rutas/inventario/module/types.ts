@@ -16,6 +16,11 @@ export interface IActualizarLibroParams {
   costo_fob?: number;
 }
 
+export interface ICambioEstado {
+  razon: string;
+  id: string;
+}
+
 export interface ILibro {
   id: string;
   isbn: string;
