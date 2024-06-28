@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
 import { IHistorialParams } from "./types";
+import { ErroresHistorial } from "../errors/erroresHistorial";
 
 const prisma = new PrismaClient();
 
 export class Historial {
   async agregarHistorial(params: IHistorialParams) {
-    console.log("Agregando");
     try {
       const date = new Date();
       const agregarHistorialResponse =
@@ -19,10 +19,7 @@ export class Historial {
           },
         });
       if (!agregarHistorialResponse)
-        return Result.errorOperacion(
-          "Operacion no agregada",
-          "Se produjo un error al tratar de guardar la operacion"
-        );
+        return Result.errorOperacion(ErroresHistorial.HISTORIAL_NO_AGREGADO);
 
       return Result.success(agregarHistorialResponse);
     } catch (error) {}
@@ -42,10 +39,7 @@ export class Historial {
         });
 
       if (!listarHistorialResponse)
-        return Result.errorOperacion(
-          "Operaciones no encontradas",
-          "No se encontaron operaciones por listar"
-        );
+        return Result.errorOperacion(ErroresHistorial.HISTORIAL_NO_ENCONTRADO);
 
       return Result.success(listarHistorialResponse);
     } catch (error) {}

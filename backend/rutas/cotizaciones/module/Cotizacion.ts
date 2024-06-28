@@ -1,12 +1,13 @@
-import { PrismaClient, detalle_articulos } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { Result } from "../../../utils/result";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { Historial } from "../../historial/module/Historial";
 import {
   IAprobarCotizacionParams,
   ICrearCotizacionParams,
   IDenegarCotizacionParams,
-  IDetalleArticulos,
 } from "./types";
-import { Historial } from "../../historial/module/Historial";
-import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { ErroresCotizacion } from "../../cotizaciones/errors/erroresCotizacion";
 
 const prisma = new PrismaClient();
 const historial = new Historial();
@@ -14,6 +15,28 @@ const historial = new Historial();
 export class Cotizacion {
   async crearCotizacion(params: ICrearCotizacionParams) {
     try {
+      const librosActivos = await prisma.inventario.findMany({
+        where: { estado: "activo" },
+        select: { id: true, precio_unitario: true },
+      });
+      if (!librosActivos)
+        return Result.errorOperacion(ErroresCotizacion.LIBROS_NO_ENCONTRADOS);
+
+      const arrayLibrosCotizados = params.detalle_articulos.map((idArticulos) =>
+        idArticulos.id_inventario.toString()
+      );
+
+      const arrayLibrosActivos = librosActivos.map((idLibros) =>
+        idLibros.id.toString()
+      );
+
+      const validarLibros = arrayLibrosCotizados.filter(
+        (id) => !arrayLibrosActivos.includes(id)
+      );
+
+      if (validarLibros.length > 0)
+        throw "Uno de los articulos indicados no existe";
+
       const crearCotizacionResponse = await prisma.cotizaciones.create({
         data: {
           id_usuario_solicita: params.id_usuario_solicita,
@@ -23,11 +46,7 @@ export class Cotizacion {
         },
       });
       if (!crearCotizacionResponse)
-        return {
-          sucess: false,
-          error: "Cotizacion no creada",
-          detalle: "Ocurrio un error al crear la cotizacion",
-        };
+        return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_CREADA);
 
       const historialResponse = await historial.agregarHistorial({
         accion: EAccionHistorial.CREATE,
@@ -40,7 +59,7 @@ export class Cotizacion {
 
       if (historialResponse?.error) throw historialResponse.detalle;
 
-      return { success: true, data: crearCotizacionResponse };
+      return Result.success(crearCotizacionResponse);
     } catch (error) {
       return {
         success: false,
@@ -66,11 +85,7 @@ export class Cotizacion {
         },
       });
       if (!aprobarCotizacionResponse)
-        return {
-          sucess: false,
-          error: "Cotizacion no aceptada",
-          detalle: "Ocurrio un error al aceptar la cotizacion",
-        };
+        return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_APROBADA);
 
       const historialResponse = await historial.agregarHistorial({
         accion: EAccionHistorial.APROBADO,
@@ -83,7 +98,7 @@ export class Cotizacion {
 
       if (historialResponse?.error) throw historialResponse.detalle;
 
-      return { success: true, data: aprobarCotizacionResponse };
+      return Result.success(aprobarCotizacionResponse);
     } catch (error) {
       return {
         success: false,
@@ -104,11 +119,7 @@ export class Cotizacion {
         },
       });
       if (!denegarCotizacionResponse)
-        return {
-          sucess: false,
-          error: "Cotizacion no aceptada",
-          detalle: "Ocurrio un error al aceptar la cotizacion",
-        };
+        return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_DENEGADA);
 
       const historialResponse = await historial.agregarHistorial({
         accion: EAccionHistorial.DENEGADO,
@@ -121,7 +132,7 @@ export class Cotizacion {
 
       if (historialResponse?.error) throw historialResponse.detalle;
 
-      return { success: true, data: denegarCotizacionResponse };
+      return Result.success(denegarCotizacionResponse);
     } catch (error) {
       return {
         success: false,
@@ -135,17 +146,7 @@ export class Cotizacion {
     try {
       const listarCotizacionesResponse = await prisma.cotizaciones.findMany({
         select: {
-          institucion: {
-            select: {
-              nombre: true,
-              porcentaje_descuento: true,
-              direccion: true,
-              contacto_principal: true,
-              tel_contacto_principal: true,
-              contacto_secundario: true,
-              tel_contacto_secundario: true,
-            },
-          },
+          institucion: true,
           fecha: true,
           estado: true,
           id_usuario_solicita: true,
@@ -153,14 +154,13 @@ export class Cotizacion {
         },
       });
       if (!listarCotizacionesResponse)
-        return {
-          success: false,
-          error: "No existen cotizaciones",
-          detalle: "Actualmente no existen cotizaciones",
-        };
+        return Result.errorOperacion(
+          ErroresCotizacion.COTIZACIONES_NO_ENCONTRADAS
+        );
 
-      return { success: true, data: listarCotizacionesResponse };
+      return Result.success(listarCotizacionesResponse);
     } catch (error) {
+      console.log(error);
       return {
         success: false,
         mensaje: "hubo un error durante la operacion",

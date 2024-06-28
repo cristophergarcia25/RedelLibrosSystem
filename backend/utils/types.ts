@@ -5,6 +5,11 @@ export interface IResult<T> {
   success: boolean;
 }
 
+export interface IErrorGenerico {
+  error: string;
+  detalle: string;
+}
+
 export enum EAccionHistorial {
   CREATE = "Create",
   UPDATE = "Update",

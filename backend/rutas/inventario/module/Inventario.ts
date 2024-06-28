@@ -6,6 +6,7 @@ import {
   ILibro,
 } from "./types";
 import { Result } from "../../../utils/result";
+import { ErroresInventario } from "../errors/erroresInventario";
 
 const prisma = new PrismaClient();
 
@@ -26,12 +27,9 @@ export class Inventario {
         },
       });
       if (!agregarLibroResponse)
-        return {
-          error: "Libro no agregado",
-          detalle: "Hubo un problema agregando el libro a la base de datos",
-        };
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_NO_AGREGADO);
 
-      return agregarLibroResponse;
+      return Result.success(agregarLibroResponse);
     } catch (error) {
       return error;
     }
@@ -57,15 +55,11 @@ export class Inventario {
       });
 
       if (!actualizarLibroResponse)
-        return {
-          error: "Libro no actualizado",
-          detalle: "Hubo un problema actualizando el libro",
-        };
-
+        Result.errorOperacion(ErroresInventario.LIBRO_NO_ACTUALIZADO);
       if (params.precio_unitario || params.cantidad || params.costo_fob)
         return await this.actualizarTotalVenta(actualizarLibroResponse);
 
-      return actualizarLibroResponse;
+      return Result.success(actualizarLibroResponse);
     } catch (error) {
       return error;
     }
@@ -89,12 +83,11 @@ export class Inventario {
       });
 
       if (!listarLibrosResponse)
-        return {
-          error: "No existen libros ",
-          detalle: "No hay libros en el inventario",
-        };
+        return Result.errorOperacion(
+          ErroresInventario.INVENTARIO_NO_ENCONTRADO
+        );
 
-      return listarLibrosResponse;
+      return Result.success(listarLibrosResponse);
     } catch (error) {
       return error;
     }
@@ -120,12 +113,9 @@ export class Inventario {
       });
 
       if (!obtenerLibroResponse)
-        return {
-          error: "No se encontro el libro",
-          detalle: "El ISBN no coincide con ningun libro",
-        };
+        return Result.errorOperacion(ErroresInventario.LIBRO_NO_ENCONTRADO);
 
-      return obtenerLibroResponse;
+      return Result.success(obtenerLibroResponse);
     } catch (error) {
       return error;
     }
@@ -143,10 +133,7 @@ export class Inventario {
         },
       });
       if (!desactivarLibroResponse)
-        return Result.errorOperacion(
-          "Libro no desactivado",
-          "Hubo un error desactivando el libro"
-        );
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_ERROR_ESTADO);
 
       return Result.success(desactivarLibroResponse);
     } catch (error) {
@@ -165,10 +152,7 @@ export class Inventario {
         },
       });
       if (!activarLibroResponse)
-        return Result.errorOperacion(
-          "Libro no activado",
-          "Hubo un error activando el libro"
-        );
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_ERROR_ESTADO);
 
       return Result.success(activarLibroResponse);
     } catch (error) {
@@ -184,12 +168,9 @@ export class Inventario {
         },
       });
       if (!eliminarLibroResponse)
-        return {
-          error: "Error eliminando libro",
-          detalle: "Ocurrio un error al intentar borrar el libro",
-        };
+        return Result.errorOperacion(ErroresInventario.LIBRO_NO_ELIMINADO);
 
-      return eliminarLibroResponse;
+      return Result.success(eliminarLibroResponse);
     } catch (error) {
       return error;
     }
