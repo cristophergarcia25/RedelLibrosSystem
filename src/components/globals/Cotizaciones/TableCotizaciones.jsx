@@ -613,16 +613,16 @@ useEffect(() => {
             >
               <div className="p-4">
                 <h3 className="text-lg font-bold mb-2">Institución</h3>
-                <p><strong>Nombre:</strong> {infoDetail.institucion.nombre}</p>
-                <p><strong>Porcentaje de Descuento:</strong> {infoDetail.institucion.porcentaje_descuento}%</p>
-                <p><strong>Dirección:</strong> {infoDetail.institucion.direccion}</p>
-                <p><strong>Contacto Principal:</strong> {infoDetail.institucion.contacto_principal}</p>
-                <p><strong>Tel. Contacto Principal:</strong> {infoDetail.institucion.tel_contacto_principal}</p>
-                {infoDetail.institucion.contacto_secundario && (
-                  <p><strong>Contacto Secundario:</strong> {infoDetail.institucion.contacto_secundario}</p>
+                <p><strong>Nombre:</strong> {infoDetail?.institucion?.nombre}</p>
+                <p><strong>Porcentaje de Descuento:</strong> {infoDetail?.institucion?.porcentaje_descuento}%</p>
+                <p><strong>Dirección:</strong> {infoDetail?.institucion?.direccion}</p>
+                <p><strong>Contacto Principal:</strong> {infoDetail?.institucion?.contacto_principal}</p>
+                <p><strong>Tel. Contacto Principal:</strong> {infoDetail?.institucion?.tel_contacto_principal}</p>
+                {infoDetail?.institucion?.contacto_secundario && (
+                  <p><strong>Contacto Secundario:</strong> {infoDetail?.institucion?.contacto_secundario}</p>
                 )}
-                {infoDetail.institucion.tel_contacto_secundario && (
-                  <p><strong>Tel. Contacto Secundario:</strong> {infoDetail.institucion.tel_contacto_secundario}</p>
+                {infoDetail?.institucion?.tel_contacto_secundario && (
+                  <p><strong>Tel. Contacto Secundario:</strong> {infoDetail?.institucion?.tel_contacto_secundario}</p>
                 )}
 
                 <h3 className="text-lg font-bold mb-2 mt-4">Detalles de Artículos</h3>
@@ -636,7 +636,7 @@ useEffect(() => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {infoDetail.detalle_articulos.map((articulo, index) => (
+                    {infoDetail?.detalle_articulos?.map((articulo, index) => (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap">{articulo.id_inventario}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{articulo.cantidad}</td>
