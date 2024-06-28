@@ -216,6 +216,7 @@ useEffect(() => {
                 toast.success('Se realizó la solicitud con éxito');
                 reloadList(true);
                 setIsOpen2(false);
+                setBook(null);
               } else if (data.name === 'PrismaClientValidationError') {
                 toast.error('Se reportó un error al agregar el cliente');
               }
@@ -433,7 +434,7 @@ useEffect(() => {
         <Modals
         title='Editar Institución' 
         opModal={isOpen2} 
-        handleClose={(newValue)=> setIsOpen2(newValue)} 
+        handleClose={(newValue)=> {setIsOpen2(newValue); setBook(null); setFilteredBooks([]); reloadList(true)}} 
         handleNewBook={(newValue) => handleEditBook()}
         >
           <div className='grid grid-cols-2 gap-1'>
