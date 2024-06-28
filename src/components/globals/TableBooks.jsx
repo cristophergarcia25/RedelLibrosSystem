@@ -143,7 +143,7 @@ useEffect(() => {
         }
     }
 
-    const handleEditBook = async () => {
+    const handleAumentar = async () => {
       // Obtener los valores de los campos
       const cantidad = document.getElementById('cantidad').value;
 
@@ -188,6 +188,56 @@ useEffect(() => {
           }
       }
   }
+
+  const handleDisminuir = async () => {
+    // Obtener los valores de los campos
+    const cantidad = document.getElementById('cantidad').value;
+    const razon = document.getElementById('razon').value;
+    if(Number(cantidad) > book.cantidad){
+      toast.error('La cantidad a disminuir no puede ser mayor a la cantidad actual');
+      return;
+    }
+    // Verificar si alguno de los campos está vacío
+    if (cantidad === '' || razon === '') {
+        toast.error('Todos los campos son obligatorios, vuelve a intentarlo');
+    } else {
+        console.log(book)
+        const params = {
+            id: book.id,
+            cantidad: book.cantidad - Number(cantidad),
+            razon
+        }
+        console.log(params)
+        console.log(JSON.stringify(params))
+        try {
+          const response = await fetch('http://localhost:4000/inventario', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        });
+            if (response.ok) {
+                const data = await response.json();
+                if (!data || !data.name) {
+                    toast.success('Se realizó la solicitud con éxito');
+                    reloadList(true);
+                    setIsOpen3(false);
+                } else if (data.name === 'PrismaClientValidationError') {
+                    toast.error('Se reportó un error al agregar el libro');
+                }
+            } else {
+                console.error('Error en la solicitud:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+        }
+    }
+}
+
+
+
+  
     const [book, setBook] = useState(null);//[{}
     const handleModalAmount = (valor) => {
         console.log(valor);
@@ -360,7 +410,7 @@ useEffect(() => {
             title='Agregar Inventario' 
             opModal={isOpen2} 
             handleClose={(newValue)=> setIsOpen2(newValue)} 
-            handleNewBook={(newValue) => handleEditBook()}
+            handleNewBook={(newValue) => handleAumentar()}
         >
             <div className='grid grid-cols-1 gap-1'>
                 <div className="form-group">
@@ -373,7 +423,7 @@ useEffect(() => {
             title='Eliminar de Inventario' 
             opModal={isOpen3} 
             handleClose={(newValue)=> setIsOpen3(newValue)} 
-            handleNewBook={(newValue) => handleEditBook()}
+            handleNewBook={(newValue) => handleDisminuir()}
         >
             <div className='grid grid-cols-1 gap-1'>
                 <div className="form-group">
@@ -381,8 +431,8 @@ useEffect(() => {
                     <input type="text" className="text-color-gray-o  rounded-lg focus:ring-musgo focus:border-musgo block w-full p-2.5   dark:focus:ring-musgo dark:focus:border-musgo" id="cantidad" placeholder="Ingrese la cantidad" required />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="descripcion"><span className='text-color-gray'>Motivo:</span> <span className="text-red-500">*</span></label>
-                    <textarea type="text" className="text-color-gray-o  rounded-lg focus:ring-musgo focus:border-musgo block w-full p-2.5   dark:focus:ring-musgo dark:focus:border-musgo" id="descripcion" placeholder="Ingrese el porque desea disminuir" required />
+                    <label htmlFor="razon"><span className='text-color-gray'>Razón:</span> <span className="text-red-500">*</span></label>
+                    <textarea type="text" className="text-color-gray-o  rounded-lg focus:ring-musgo focus:border-musgo block w-full p-2.5   dark:focus:ring-musgo dark:focus:border-musgo" id="razon" placeholder="Ingrese el porque desea disminuir" required />
                 </div>
             </div>
         </Modals>
