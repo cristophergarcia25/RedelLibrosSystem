@@ -1,5 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { IActualizarLibroParams, IAgregarLibroParams, ILibro } from "./types";
+import {
+  IActualizarLibroParams,
+  IAgregarLibroParams,
+  ICambioEstado,
+  ILibro,
+} from "./types";
+import { Result } from "../../../utils/result";
 
 const prisma = new PrismaClient();
 
@@ -120,6 +126,51 @@ export class Inventario {
         };
 
       return obtenerLibroResponse;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async desactivarLibro(params: ICambioEstado) {
+    try {
+      const desactivarLibroResponse = await prisma.inventario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          estado: "desactivado",
+          razon: params.razon,
+        },
+      });
+      if (!desactivarLibroResponse)
+        return Result.errorOperacion(
+          "Libro no desactivado",
+          "Hubo un error desactivando el libro"
+        );
+
+      return Result.success(desactivarLibroResponse);
+    } catch (error) {
+      return error;
+    }
+  }
+  async activarLibro(params: ICambioEstado) {
+    try {
+      const activarLibroResponse = await prisma.inventario.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          estado: "activado",
+          razon: params.razon,
+        },
+      });
+      if (!activarLibroResponse)
+        return Result.errorOperacion(
+          "Libro no activado",
+          "Hubo un error activando el libro"
+        );
+
+      return Result.success(activarLibroResponse);
     } catch (error) {
       return error;
     }

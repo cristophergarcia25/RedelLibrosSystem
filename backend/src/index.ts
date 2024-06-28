@@ -4,6 +4,8 @@ import actualizarInstitucion from "../rutas/instituciones/actualizarInstitucion"
 import borrarInstitucion from "../rutas/instituciones/borrarInstitucion";
 import listarInstituciones from "../rutas/instituciones/listarInstituciones";
 import agregarLibro from "../rutas/inventario/agregarLibro";
+import activarLibro from "../rutas/inventario/activarLibro";
+import desactivarLibro from "../rutas/inventario/desactivarLibro";
 import actualizarLibro from "../rutas/inventario/actualizarLibro";
 import listarLibros from "../rutas/inventario/listarLibros";
 import obtenerLibro from "../rutas/inventario/obtenerLibro";
@@ -56,6 +58,8 @@ app.use("/", loginApi);
 app.use("/", agregarLibro);
 app.use("/", actualizarLibro);
 app.use("/", eliminarLibro);
+app.use("/", activarLibro);
+app.use("/", desactivarLibro);
 app.use("/", listarLibros);
 app.use("/", obtenerLibro);
 app.use("/", agregarInstitucion);
