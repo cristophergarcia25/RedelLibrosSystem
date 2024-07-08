@@ -236,6 +236,17 @@ useEffect(() => {
 
     const handleModalEdit = (valor) => {
         console.log(valor)
+        document.getElementById('nombre').value = valor.nombre;
+        document.getElementById('contacto_principal').value = valor.contacto_principal;
+        document.getElementById('correo_principal').value = valor.correo_contacto_principal;
+        document.getElementById('direccion').value = valor.direccion;
+        document.getElementById('cargo').value = valor.cargo_contacto_principal;
+        document.getElementById('direccion_factura').value = valor.direccion_factura;
+        document.getElementById('nit').value = valor.nit;
+        document.getElementById('nombre_factura').value = valor.nombre_factura;
+        document.getElementById('tel_contacto_principal').value = valor.tel_contacto_principal;
+        document.getElementById('percentage').value = valor.porcentaje_descuento;
+        
         setBook(valor);
         setIsOpen2(true);
     }
