@@ -1,4 +1,9 @@
 export class ErroresInventario {
+  static ACCESO_DENEGADO = {
+    error: "Acceso denegado",
+    detalle: "El usuario no tiene permiso a realizar esta operación",
+  };
+
   static INVENTARIO_NO_AGREGADO = {
     error: "Libro no creado",
     detalle: "Ocurrio un error al agregar el libro en la base de datos",
@@ -16,7 +21,7 @@ export class ErroresInventario {
 
   static LIBRO_NO_ENCONTRADO = {
     error: "No se encontro el libro",
-    detalle: "El id no coincide con ningun libro",
+    detalle: "El id no coincide con ningún libro",
   };
 
   static LIBRO_NO_ELIMINADO = {

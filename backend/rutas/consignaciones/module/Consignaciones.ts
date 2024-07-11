@@ -8,9 +8,11 @@ import {
 } from "./types";
 import { EAccionHistorial, ERecursos } from "../../../utils/types";
 import { Result } from "../../../utils/result";
+import { Usuario } from "../../usuarios/module/Usuario";
 
 const prisma = new PrismaClient();
 const historial = new Historial();
+const usuario = new Usuario();
 
 export class Consignaciones {
   async crearConsignacion(params: ICrearConsignacionParams) {

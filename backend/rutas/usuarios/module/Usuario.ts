@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { IActualizarUsuarioParams, ICrearUsuarioParams } from "./types";
+import { Result } from "../../../utils/result";
+import { IResult } from "../../../utils/types";
 
 const prisma = new PrismaClient();
 
@@ -68,7 +70,7 @@ export class Usuario {
    * it will return the user object. If there is an error during the process, it will return the error
    * message.
    */
-  async obtenerUsuario(id: string) {
+  async obtenerUsuario(id: string): Promise<IResult<any>> {
     try {
       const obtenerUsuarioResponse = await prisma.usuario.findFirst({
         where: {
@@ -78,9 +80,9 @@ export class Usuario {
 
       if (!obtenerUsuarioResponse) throw "Error al crear un nuevo usuario";
 
-      return obtenerUsuarioResponse;
+      return Result.success(obtenerUsuarioResponse);
     } catch (error) {
-      return error;
+      return Result.customError(error);
     }
   }
 

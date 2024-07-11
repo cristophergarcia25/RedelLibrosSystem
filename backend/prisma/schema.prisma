@@ -21,6 +21,8 @@ model usuario {
   apellido              String
   contrasena            String
   historial_operaciones historial_operaciones[]
+  cotizaciones          cotizaciones[]
+  facturas              factura[]
 }
 
 model institucion {
@@ -104,16 +106,17 @@ model consignaciones {
 }
 
 model factura {
-  id             String              @id @default(auto()) @map("_id") @db.ObjectId
-  fecha          DateTime            @default(now())
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  fecha          DateTime    @default(now())
   num_factura    String
   tipo_documento String
-  institucion    institucion         @relation(fields: [id_institucion], references: [id])
-  id_institucion String              @db.ObjectId
-  articulos      detalle_articulos[]
-  descuento      Float?
-  id_usuario     String
-  estado         String
+  institucion    institucion @relation(fields: [id_institucion], references: [id])
+  id_institucion String      @db.ObjectId
+
+  descuento  Float?
+  usuario    usuario @relation(fields: [id_usuario], references: [id])
+  id_usuario String  @db.ObjectId
+  estado     String
 }
 
 model cotizaciones {
@@ -122,6 +125,7 @@ model cotizaciones {
   institucion         institucion         @relation(fields: [id_institucion], references: [id])
   id_institucion      String              @db.ObjectId
   detalle_articulos   detalle_articulos[]
+  usuario             usuario             @relation(fields: [id_usuario_solicita], references: [id])
   id_usuario_solicita String              @db.ObjectId
   estado              String
   aprobado_por        aprobado_por?

@@ -5,6 +5,7 @@ export interface IAgregarLibroParams {
   precio_unitario: number;
   titulo: string;
   costo_fob: number;
+  id_usuario: string;
 }
 
 export interface IActualizarLibroParams {
@@ -14,11 +15,13 @@ export interface IActualizarLibroParams {
   precio_unitario?: number;
   titulo?: string;
   costo_fob?: number;
+  id_usuario: string;
 }
 
 export interface ICambioEstado {
   razon: string;
   id: string;
+  id_usuario: string;
 }
 
 export interface ILibro {

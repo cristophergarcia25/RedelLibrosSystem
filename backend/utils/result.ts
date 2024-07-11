@@ -19,4 +19,15 @@ export class Result {
     };
     return response;
   }
+
+  static customError(error: any) {
+    const response: IResult<any> = {
+      data: {},
+      success: false,
+      error: "Error desconocido",
+      detalle: error,
+    };
+
+    return response;
+  }
 }

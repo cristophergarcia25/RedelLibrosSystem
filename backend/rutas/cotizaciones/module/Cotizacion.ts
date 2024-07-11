@@ -149,7 +149,13 @@ export class Cotizacion {
           institucion: true,
           fecha: true,
           estado: true,
-          id_usuario_solicita: true,
+          usuario: {
+            select: {
+              id: true,
+              nombre: true,
+              apellido: true,
+            },
+          },
           detalle_articulos: true,
         },
       });
@@ -160,12 +166,7 @@ export class Cotizacion {
 
       return Result.success(listarCotizacionesResponse);
     } catch (error) {
-      console.log(error);
-      return {
-        success: false,
-        mensaje: "hubo un error durante la operacion",
-        error: error,
-      };
+      return Result.customError(error);
     }
   }
 }

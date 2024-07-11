@@ -7,12 +7,27 @@ import {
 } from "./types";
 import { Result } from "../../../utils/result";
 import { ErroresInventario } from "../errors/erroresInventario";
+import { Usuario } from "../../usuarios/module/Usuario";
+import { Historial } from "../../historial/module/Historial";
+import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
 
 const prisma = new PrismaClient();
+const usuario = new Usuario();
+const historial = new Historial();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
 export class Inventario {
   async agregarLibro(params: IAgregarLibroParams) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
+
       const agregarLibroResponse = await prisma.inventario.create({
         data: {
           cantidad: params.cantidad,
@@ -29,6 +44,15 @@ export class Inventario {
       if (!agregarLibroResponse)
         return Result.errorOperacion(ErroresInventario.INVENTARIO_NO_AGREGADO);
 
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.INVENTARIO,
+          id_recurso: agregarLibroResponse.id,
+        },
+      });
+
       return Result.success(agregarLibroResponse);
     } catch (error) {
       return error;
@@ -37,6 +61,14 @@ export class Inventario {
 
   async actualizarLibro(params: IActualizarLibroParams) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
+
       const actualizarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -58,6 +90,15 @@ export class Inventario {
         Result.errorOperacion(ErroresInventario.LIBRO_NO_ACTUALIZADO);
       if (params.precio_unitario || params.cantidad || params.costo_fob)
         return await this.actualizarTotalVenta(actualizarLibroResponse);
+
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.INVENTARIO,
+          id_recurso: actualizarLibroResponse.id,
+        },
+      });
 
       return Result.success(actualizarLibroResponse);
     } catch (error) {
@@ -123,6 +164,12 @@ export class Inventario {
 
   async desactivarLibro(params: ICambioEstado) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
       const desactivarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -142,6 +189,12 @@ export class Inventario {
   }
   async activarLibro(params: ICambioEstado) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
       const activarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,

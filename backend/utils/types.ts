@@ -10,6 +10,13 @@ export interface IErrorGenerico {
   detalle: string;
 }
 
+export enum ERoles {
+  ADMIN = "Admin",
+  AUXILIAR_ADMIN = "Auxiliar Administrador",
+  VENDEDOR = "Vendedor",
+  BODEGA = "Bodega",
+}
+
 export enum EAccionHistorial {
   CREATE = "Create",
   UPDATE = "Update",
