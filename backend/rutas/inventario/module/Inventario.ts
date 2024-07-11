@@ -6,12 +6,28 @@ import {
   ILibro,
 } from "./types";
 import { Result } from "../../../utils/result";
+import { ErroresInventario } from "../errors/erroresInventario";
+import { Usuario } from "../../usuarios/module/Usuario";
+import { Historial } from "../../historial/module/Historial";
+import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
 
 const prisma = new PrismaClient();
+const usuario = new Usuario();
+const historial = new Historial();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
 export class Inventario {
   async agregarLibro(params: IAgregarLibroParams) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
+
       const agregarLibroResponse = await prisma.inventario.create({
         data: {
           cantidad: params.cantidad,
@@ -26,12 +42,18 @@ export class Inventario {
         },
       });
       if (!agregarLibroResponse)
-        return {
-          error: "Libro no agregado",
-          detalle: "Hubo un problema agregando el libro a la base de datos",
-        };
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_NO_AGREGADO);
 
-      return agregarLibroResponse;
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.INVENTARIO,
+          id_recurso: agregarLibroResponse.id,
+        },
+      });
+
+      return Result.success(agregarLibroResponse);
     } catch (error) {
       return error;
     }
@@ -39,6 +61,14 @@ export class Inventario {
 
   async actualizarLibro(params: IActualizarLibroParams) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
+
       const actualizarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -57,15 +87,20 @@ export class Inventario {
       });
 
       if (!actualizarLibroResponse)
-        return {
-          error: "Libro no actualizado",
-          detalle: "Hubo un problema actualizando el libro",
-        };
-
+        Result.errorOperacion(ErroresInventario.LIBRO_NO_ACTUALIZADO);
       if (params.precio_unitario || params.cantidad || params.costo_fob)
         return await this.actualizarTotalVenta(actualizarLibroResponse);
 
-      return actualizarLibroResponse;
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.INVENTARIO,
+          id_recurso: actualizarLibroResponse.id,
+        },
+      });
+
+      return Result.success(actualizarLibroResponse);
     } catch (error) {
       return error;
     }
@@ -89,12 +124,11 @@ export class Inventario {
       });
 
       if (!listarLibrosResponse)
-        return {
-          error: "No existen libros ",
-          detalle: "No hay libros en el inventario",
-        };
+        return Result.errorOperacion(
+          ErroresInventario.INVENTARIO_NO_ENCONTRADO
+        );
 
-      return listarLibrosResponse;
+      return Result.success(listarLibrosResponse);
     } catch (error) {
       return error;
     }
@@ -120,12 +154,9 @@ export class Inventario {
       });
 
       if (!obtenerLibroResponse)
-        return {
-          error: "No se encontro el libro",
-          detalle: "El ISBN no coincide con ningun libro",
-        };
+        return Result.errorOperacion(ErroresInventario.LIBRO_NO_ENCONTRADO);
 
-      return obtenerLibroResponse;
+      return Result.success(obtenerLibroResponse);
     } catch (error) {
       return error;
     }
@@ -133,6 +164,12 @@ export class Inventario {
 
   async desactivarLibro(params: ICambioEstado) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
       const desactivarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -143,10 +180,7 @@ export class Inventario {
         },
       });
       if (!desactivarLibroResponse)
-        return Result.errorOperacion(
-          "Libro no desactivado",
-          "Hubo un error desactivando el libro"
-        );
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_ERROR_ESTADO);
 
       return Result.success(desactivarLibroResponse);
     } catch (error) {
@@ -155,6 +189,12 @@ export class Inventario {
   }
   async activarLibro(params: ICambioEstado) {
     try {
+      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
+      if (usuarioActivo.error || !usuarioActivo.data)
+        throw usuarioActivo.detalle;
+
+      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
+        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
       const activarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -165,10 +205,7 @@ export class Inventario {
         },
       });
       if (!activarLibroResponse)
-        return Result.errorOperacion(
-          "Libro no activado",
-          "Hubo un error activando el libro"
-        );
+        return Result.errorOperacion(ErroresInventario.INVENTARIO_ERROR_ESTADO);
 
       return Result.success(activarLibroResponse);
     } catch (error) {
@@ -184,12 +221,9 @@ export class Inventario {
         },
       });
       if (!eliminarLibroResponse)
-        return {
-          error: "Error eliminando libro",
-          detalle: "Ocurrio un error al intentar borrar el libro",
-        };
+        return Result.errorOperacion(ErroresInventario.LIBRO_NO_ELIMINADO);
 
-      return eliminarLibroResponse;
+      return Result.success(eliminarLibroResponse);
     } catch (error) {
       return error;
     }
