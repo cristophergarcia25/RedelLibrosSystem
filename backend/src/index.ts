@@ -31,6 +31,7 @@ import actualizarProveedor from "../rutas/proveedor/actualizarProveedor";
 import borrarProveedor from "../rutas/proveedor/borrarProveedor";
 import listarProveedores from "../rutas/proveedor/listarProveedores";
 import listarHistorial from "../rutas/historial/listarHistorial";
+import session from "express-session";
 
 const app = express();
 
@@ -49,6 +50,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use(express.json());
+
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // En producción, debería ser true
+  })
+);
 
 app.use("/", crearUsuario);
 app.use("/", obtenerUsuario);
