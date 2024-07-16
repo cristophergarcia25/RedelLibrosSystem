@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { ILoginParams } from "./types";
+import { IResult } from "../../../utils/types";
+import { Result } from "../../../utils/result";
+import { ErroresUsuario } from "../errors/userErrors";
 
 export class Security {
   public prisma: PrismaClient;
@@ -18,7 +21,7 @@ export class Security {
    * "El usuario o contraseña estan incorrectos". If an error occurs during the execution of the
    * function, it will return the error object.
    */
-  async login(params: ILoginParams) {
+  async login(params: ILoginParams): Promise<IResult<any>> {
     try {
       const loginResponse = await this.prisma.usuario.findUnique({
         where: {
@@ -35,14 +38,11 @@ export class Security {
       });
 
       if (!loginResponse)
-        return {
-          error: "Usuario no encontrado",
-          detalle: "El usuario o contraseña estan incorrectos",
-        };
+        return Result.customError(ErroresUsuario.ACCESO_DENEGADO);
 
-      return loginResponse;
-    } catch (error) {
-      return error;
+      return Result.success(loginResponse);
+    } catch (error: any) {
+      return Result.errorOperacion(error);
     }
   }
 }

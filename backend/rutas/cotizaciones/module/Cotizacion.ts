@@ -8,9 +8,11 @@ import {
   IDenegarCotizacionParams,
 } from "./types";
 import { ErroresCotizacion } from "../../cotizaciones/errors/erroresCotizacion";
+import { Usuario } from "../../usuarios/module/Usuario";
 
 const prisma = new PrismaClient();
 const historial = new Historial();
+const usuario = new Usuario();
 
 export class Cotizacion {
   async crearCotizacion(params: ICrearCotizacionParams) {
