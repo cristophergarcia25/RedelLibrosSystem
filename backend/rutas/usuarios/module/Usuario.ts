@@ -13,8 +13,9 @@ export class Usuario {
    * containing the newly created user's information. If there is an error during the creation process,
    * the function will return the error message.
    */
-  async crearUsuario(params: ICrearUsuarioParams) {
+  async crearUsuario(params: ICrearUsuarioParams, rol: string) {
     try {
+      console.log(rol);
       const crearResponse = await prisma.usuario.create({
         data: {
           email: params.email,
