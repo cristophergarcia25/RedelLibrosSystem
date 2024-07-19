@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { IActualizarProveedorParams, ICrearProveedorParams } from "./types";
+import { ERoles } from "../../../utils/types";
+import { ErroresGenericos } from "../../../src/errores";
+import { Result } from "../../../utils/result";
 
 const prisma = new PrismaClient();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
 export class Proveedor {
   async crearProveedor(params: ICrearProveedorParams) {
@@ -27,8 +32,11 @@ export class Proveedor {
     }
   }
 
-  async actualizarProveedor(params: IActualizarProveedorParams) {
+  async actualizarProveedor(params: IActualizarProveedorParams, rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
+
       const actualizarProveedorResponse = await prisma.proveedor.update({
         where: {
           id: params.id,
@@ -77,8 +85,11 @@ export class Proveedor {
     }
   }
 
-  async borrarProveedor(id: string) {
+  async borrarProveedor(id: string, rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
+
       const borrarProveedorResponse = await prisma.proveedor.delete({
         where: {
           id: id,
