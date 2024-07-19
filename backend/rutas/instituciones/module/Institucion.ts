@@ -3,8 +3,13 @@ import {
   IActualizarInstitucionParams,
   IAgregarInstitucionParams,
 } from "./types";
+import { ERoles } from "../../../utils/types";
+import { Result } from "../../../utils/result";
+import { ErroresGenericos } from "../../../src/errores";
 
 const prisma = new PrismaClient();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN, ERoles.VENDEDOR];
 
 export class Institucion {
   async agregarInstitucion(params: IAgregarInstitucionParams) {
@@ -41,8 +46,14 @@ export class Institucion {
     }
   }
 
-  async actualizarInstitucion(params: IActualizarInstitucionParams) {
+  async actualizarInstitucion(
+    params: IActualizarInstitucionParams,
+    rol: ERoles
+  ) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
+
       const actualizarInstitucionResponse = await prisma.institucion.update({
         where: {
           id: params.id,
@@ -137,8 +148,10 @@ export class Institucion {
     }
   }
 
-  async borrarInstitucion(id: string) {
+  async borrarInstitucion(id: string, rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
       const borrarInstitucionResponse = await prisma.institucion.delete({
         where: { id: id },
       });
