@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { IActualizarUsuarioParams, ICrearUsuarioParams } from "./types";
 import { Result } from "../../../utils/result";
-import { IResult } from "../../../utils/types";
+import { ERoles, IResult } from "../../../utils/types";
+import { ErroresGenericos } from "../../../src/errores";
 
 const prisma = new PrismaClient();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
 export class Usuario {
   /**
@@ -13,9 +16,10 @@ export class Usuario {
    * containing the newly created user's information. If there is an error during the creation process,
    * the function will return the error message.
    */
-  async crearUsuario(params: ICrearUsuarioParams, rol: string) {
+  async crearUsuario(params: ICrearUsuarioParams, rol: ERoles) {
     try {
-      console.log(rol);
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
       const crearResponse = await prisma.usuario.create({
         data: {
           email: params.email,
@@ -34,8 +38,10 @@ export class Usuario {
     }
   }
 
-  async actualizarUsuario(params: IActualizarUsuarioParams) {
+  async actualizarUsuario(params: IActualizarUsuarioParams, rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
       const actualizarUsuarioResponse = await prisma.usuario.update({
         where: {
           id: params.id,
@@ -87,8 +93,10 @@ export class Usuario {
     }
   }
 
-  async borrarUsuario(id: string) {
+  async borrarUsuario(id: string, rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
       const borrarUsuarioResponse = await prisma.usuario.delete({
         where: {
           id: id,
