@@ -1,18 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
-import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
+import { ErroresCotizacion } from "../../cotizaciones/errors/erroresCotizacion";
 import { Historial } from "../../historial/module/Historial";
 import {
   IAprobarCotizacionParams,
   ICrearCotizacionParams,
   IDenegarCotizacionParams,
 } from "./types";
-import { ErroresCotizacion } from "../../cotizaciones/errors/erroresCotizacion";
-import { Usuario } from "../../usuarios/module/Usuario";
 
 const prisma = new PrismaClient();
 const historial = new Historial();
-const usuario = new Usuario();
 
 export class Cotizacion {
   async crearCotizacion(params: ICrearCotizacionParams) {
@@ -144,7 +142,7 @@ export class Cotizacion {
     }
   }
 
-  async listarCotizaciones() {
+  async listarCotizaciones(rol: ERoles) {
     try {
       const listarCotizacionesResponse = await prisma.cotizaciones.findMany({
         select: {

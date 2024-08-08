@@ -15,7 +15,10 @@ router.delete("/institucion:id", async (req, res) => {
         .status(500)
         .json(Result.errorOperacion(ErroresGenericos.MIDDLEWARE_NO_ENCONTRADO));
 
-    const response = await institucion.borrarInstitucion(id);
+    const response = await institucion.borrarInstitucion(
+      id,
+      req.session.user?.rol
+    );
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);

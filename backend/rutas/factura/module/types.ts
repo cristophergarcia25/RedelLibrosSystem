@@ -3,5 +3,10 @@ export interface ICrearFacturaParams {
   tipo_documento: string;
   id_institucion: string;
   id_usuario: string;
-  articulos: string[];
+  articulos: IDetalleArticulos[];
+}
+
+export interface IDetalleArticulos {
+  id_inventario: string;
+  cantidad: number;
 }

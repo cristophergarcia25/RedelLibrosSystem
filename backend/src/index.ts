@@ -31,6 +31,8 @@ import actualizarProveedor from "../rutas/proveedor/actualizarProveedor";
 import borrarProveedor from "../rutas/proveedor/borrarProveedor";
 import listarProveedores from "../rutas/proveedor/listarProveedores";
 import listarHistorial from "../rutas/historial/listarHistorial";
+import crearFactura from "../rutas/factura/crearFactura";
+import listarFacturas from "../rutas/factura/listarFactura";
 import session from "express-session";
 
 const app = express();
@@ -92,6 +94,8 @@ app.use("/", actualizarProveedor);
 app.use("/", listarProveedores);
 app.use("/", borrarProveedor);
 app.use("/", listarHistorial);
+app.use("/", crearFactura);
+app.use("/", listarFacturas);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
