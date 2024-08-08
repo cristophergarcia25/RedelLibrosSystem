@@ -20,14 +20,6 @@ const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 export class Inventario {
   async agregarLibro(params: IAgregarLibroParams) {
     try {
-      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
-
-      if (usuarioActivo.error || !usuarioActivo.data)
-        throw usuarioActivo.detalle;
-
-      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
-        return Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
-
       const agregarLibroResponse = await prisma.inventario.create({
         data: {
           cantidad: params.cantidad,

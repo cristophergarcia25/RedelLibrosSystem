@@ -2,8 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
 import { IHistorialParams } from "./types";
 import { ErroresHistorial } from "../errors/erroresHistorial";
+import { ERoles } from "../../../utils/types";
+import { ErroresGenericos } from "../../../src/errores";
 
 const prisma = new PrismaClient();
+
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
 export class Historial {
   async agregarHistorial(params: IHistorialParams) {
@@ -25,8 +29,11 @@ export class Historial {
     } catch (error) {}
   }
 
-  async listarHistorial() {
+  async listarHistorial(rol: ERoles) {
     try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
+
       const listarHistorialResponse =
         await prisma.historial_operaciones.findMany({
           select: {
