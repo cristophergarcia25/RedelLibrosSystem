@@ -106,7 +106,7 @@ export class Institucion {
           detalle: "Hubo un error durante la actualizacion de la institucion",
         };
 
-      return actualizarInstitucionResponse;
+      return Result.success(actualizarInstitucionResponse);
     } catch (error) {
       return error;
     }
