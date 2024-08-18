@@ -1,10 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import { IActualizarUsuarioParams, ICrearUsuarioParams } from "./types";
 import { Result } from "../../../utils/result";
-import { ERoles, IResult } from "../../../utils/types";
+import {
+  EAccionHistorial,
+  ERecursos,
+  ERoles,
+  IResult,
+} from "../../../utils/types";
 import { ErroresGenericos } from "../../../src/errores";
+import { ErroresUsuarios } from "../../usuarios/errors/erroresUsuario";
+import { Historial } from "../../historial/module/Historial";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN];
 
@@ -27,6 +35,7 @@ export class Usuario {
           apellido: params.apellido,
           rol: params.rol,
           contrasena: params.contrasena,
+          estado: "A",
         },
       });
 
@@ -64,6 +73,37 @@ export class Usuario {
       return actualizarUsuarioResponse;
     } catch (error) {
       return error;
+    }
+  }
+
+  async desactivarUsuario(id: string, rol: ERoles, id_usuario: string) {
+    try {
+      if (!rolesPermitidos.includes(rol))
+        return Result.errorOperacion(ErroresGenericos.ACCESO_DENEGADO);
+      const desactivarUsuarioResponse = await prisma.usuario.update({
+        where: {
+          id: id,
+        },
+        data: {
+          estado: "D",
+        },
+      });
+
+      if (!desactivarUsuarioResponse)
+        return Result.errorOperacion(ErroresUsuarios.USUARIO_NO_DESACTIVADO);
+
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: id_usuario,
+        recurso: {
+          recurso: ERecursos.USUARIO,
+          id_recurso: desactivarUsuarioResponse.id,
+        },
+      });
+
+      return Result.success(desactivarUsuarioResponse);
+    } catch (error) {
+      return Result.customError(error);
     }
   }
 

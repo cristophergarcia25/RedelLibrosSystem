@@ -20,6 +20,7 @@ model usuario {
   nombre                String
   apellido              String
   contrasena            String
+  estado                String?
   historial_operaciones historial_operaciones[]
   cotizaciones          cotizaciones[]
   facturas              factura[]

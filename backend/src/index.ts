@@ -12,6 +12,7 @@ import obtenerLibro from "../rutas/inventario/obtenerLibro";
 import eliminarLibro from "../rutas/inventario/eliminarLibro";
 import loginApi from "../rutas/security/loginApi";
 import borrarUsuario from "../rutas/usuarios/borrarUsuario";
+import desactivarUsuario from "../rutas/usuarios/desactivarUsuario";
 import crearUsuario from "../rutas/usuarios/crearUsuario";
 import obtenerUsuario from "../rutas/usuarios/obtenerUsuario";
 import actualizarUsuario from "../rutas/usuarios/actualizarUsuario";
@@ -65,6 +66,7 @@ app.use(
 app.use("/", crearUsuario);
 app.use("/", obtenerUsuario);
 app.use("/", actualizarUsuario);
+app.use("/", desactivarUsuario);
 app.use("/", borrarUsuario);
 app.use("/", loginApi);
 app.use("/", agregarLibro);
