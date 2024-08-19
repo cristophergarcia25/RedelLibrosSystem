@@ -59,7 +59,7 @@ model historial_operaciones {
 }
 
 model inventario {
-  id              String               @id @default(auto()) @map("_id") @db.ObjectId
+  id              String                      @id @default(auto()) @map("_id") @db.ObjectId
   isbn            String
   editorial       String
   titulo          String
@@ -70,7 +70,7 @@ model inventario {
   total_fob       Float
   estado          String?
   razon           String?
-  consignaciones  consignaciones[]
+  consignaciones  consignaciones_inventario[]
   facturas        factura_inventario[]
 }
 
@@ -95,16 +95,25 @@ model proveedor {
 }
 
 model consignaciones {
-  id             String      @id @default(auto()) @map("_id") @db.ObjectId
-  fecha          DateTime    @default(now())
-  inventario     inventario  @relation(fields: [id_libro], references: [id])
-  id_libro       String      @db.ObjectId
-  cantidad       Int
+  id             String                      @id @default(auto()) @map("_id") @db.ObjectId
+  fecha          DateTime                    @default(now())
   estado         String
   id_usuario     String
   detalle        String?
-  institucion    institucion @relation(fields: [id_institucion], references: [id])
-  id_institucion String      @db.ObjectId
+  institucion    institucion                 @relation(fields: [id_institucion], references: [id])
+  id_institucion String                      @db.ObjectId
+  articulos      consignaciones_inventario[]
+}
+
+model consignaciones_inventario {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  consignacion    consignaciones @relation(fields: [consignacionId], references: [id])
+  consignacionId  String         @db.ObjectId
+  inventario      inventario     @relation(fields: [inventarioId], references: [id])
+  inventarioId    String         @db.ObjectId
+  cantidad        Int
+  precio_unitario Float
+  subtotal        Float
 }
 
 model factura {

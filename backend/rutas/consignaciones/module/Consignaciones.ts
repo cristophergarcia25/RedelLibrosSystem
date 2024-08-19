@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
-import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
+import { ErroresConsignacion } from "../errors/erroresConsignacion";
 import { Historial } from "../../historial/module/Historial";
 import {
   IActualizarConsignacionParams,
@@ -12,61 +13,76 @@ import {
 const prisma = new PrismaClient();
 const historial = new Historial();
 
+const rolesPermitidos = [ERoles.ADMIN, ERoles.AUXILIAR_ADMIN, ERoles.VENDEDOR];
+
 export class Consignaciones {
   async crearConsignacion(params: ICrearConsignacionParams) {
     try {
-      const transaction = await prisma.$transaction(async (tx) => {
-        const verificarCantidad = await this.verificarCantidad(
-          params.id_libro,
-          params.cantidad
-        );
-        if (!verificarCantidad)
-          throw "La cantidad seleccionada es mayor a la disponible actualmente";
-
-        const consignarLibros = await tx.inventario.update({
-          where: {
-            id: params.id_libro,
-          },
-          data: {
-            cantidad: {
-              decrement: params.cantidad,
+      const articulos = await Promise.all(
+        params.articulos.map(async (articulo) => {
+          const inventario = await prisma.inventario.findUnique({
+            where: {
+              id: articulo.id_inventario,
+              cantidad: { gte: articulo.cantidad },
             },
+          });
+
+          if (!inventario) {
+            throw Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
+          }
+
+          const retirarInventario = await prisma.inventario.update({
+            where: {
+              id: articulo.id_inventario,
+              cantidad: { gte: articulo.cantidad },
+            },
+            data: {
+              cantidad: { decrement: articulo.cantidad },
+            },
+          });
+
+          if (!retirarInventario) {
+            throw Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
+          }
+
+          const subtotal = articulo.cantidad * inventario.precio_unitario;
+          return {
+            inventario: { connect: { id: articulo.id_inventario } },
+            cantidad: articulo.cantidad,
+            precio_unitario: inventario.precio_unitario,
+            subtotal,
+          };
+        })
+      );
+      if (!articulos)
+        return Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
+
+      const crearConsignacionResponse = await prisma.consignaciones.create({
+        data: {
+          institucion: { connect: { id: params.id_institucion } },
+          id_usuario: params.id_usuario,
+          estado: "P",
+          articulos: {
+            create: articulos,
           },
-        });
-
-        if (!consignarLibros)
-          throw "Hubo un error quitando los libros del inventario";
-
-        const crearConsignacion = await tx.consignaciones.create({
-          data: {
-            cantidad: params.cantidad,
-            estado: "P",
-            id_usuario: params.id_usuario,
-            id_institucion: params.id_institucion,
-            id_libro: params.id_libro,
-          },
-        });
-
-        if (!crearConsignacion)
-          throw "Error al tratar de crear la consignacion";
-
-        return crearConsignacion;
+        },
       });
 
-      if (!transaction) throw "Error al crear la consignacion";
+      if (!crearConsignacionResponse)
+        return Result.errorOperacion(
+          ErroresConsignacion.CONSIGNACION_NO_CREADA
+        );
 
-      const historialResponse = await historial.agregarHistorial({
+      await historial.agregarHistorial({
         accion: EAccionHistorial.CREATE,
         id_usuario: params.id_usuario,
         recurso: {
           recurso: ERecursos.CONSIGNACION,
-          id_recurso: transaction.id,
+          id_recurso: crearConsignacionResponse.id,
         },
       });
 
-      if (historialResponse?.success === false) throw historialResponse.error;
-
-      return Result.success(transaction);
+      return Result.success(crearConsignacionResponse);
     } catch (error) {
       return {
         success: false,
@@ -77,90 +93,11 @@ export class Consignaciones {
   }
 
   async actualizarConsignacion(params: IActualizarConsignacionParams) {
-    try {
-      const consignacionResponse = await this.obtenerConsignacion(
-        params.id_consignacion
-      );
-
-      if (
-        consignacionResponse?.data &&
-        consignacionResponse?.data?.id_libro !== params.id_libro &&
-        params.id_libro
-      ) {
-        await this.reintegrarLibros(
-          consignacionResponse.data.id_libro,
-          consignacionResponse.data.cantidad
-        );
-        let cantidad;
-        params.cantidad
-          ? (cantidad = params.cantidad)
-          : (cantidad = consignacionResponse.data.cantidad);
-        await this.consignarLibros(params.id_libro, cantidad);
-      }
-
-      if (params.cantidad && consignacionResponse?.data) {
-        const nuevaCantidad = Math.abs(
-          consignacionResponse.data.cantidad - params.cantidad
-        );
-        await this.verificarCantidad(
-          consignacionResponse.data.id_libro,
-          nuevaCantidad
-        );
-      }
-
-      const actualizarConsignacion = await prisma.consignaciones.update({
-        where: {
-          id: params.id_consignacion,
-        },
-        data: {
-          ...(params.cantidad && { cantidad: params.cantidad }),
-          ...(params.id_institucion && {
-            id_institucion: params.id_institucion,
-          }),
-          ...(params.id_libro && { id_libro: params.id_libro }),
-          ...(params.id_usuario && { id_libro: params.id_usuario }),
-        },
-      });
-      if (!actualizarConsignacion)
-        return {
-          success: false,
-          error: "Consignacion no actualizada",
-          detalle: "Hubo un error al actualizar la consignacion",
-        };
-
-      const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.UPDATE,
-        id_usuario: actualizarConsignacion.id_usuario,
-        recurso: {
-          recurso: ERecursos.CONSIGNACION,
-          id_recurso: actualizarConsignacion.id,
-        },
-      });
-
-      if (historialResponse?.error) throw historialResponse.detalle;
-
-      return { success: true, data: actualizarConsignacion };
-    } catch (error) {}
+    console.log(":p");
   }
 
   async aprobarConsignacion(params: IAprobarConsignacionParams) {
     try {
-      const usuario = await this.verificarUsuario(params.id_usuario);
-
-      if ((usuario.success = false || !usuario.data))
-        return {
-          success: false,
-          error: usuario.error,
-          detalle: usuario.detalle,
-        };
-
-      if (usuario.data.rol !== "admin")
-        return {
-          success: false,
-          error: "Operacion denegada",
-          detalle:
-            "El usuario proveido no tiene los permisos para realizar esta operacion",
-        };
       const aprobarConsignacionResponse = await prisma.consignaciones.update({
         where: {
           id: params.id_consignacion,
@@ -195,22 +132,6 @@ export class Consignaciones {
 
   async denegarConsignacion(params: IDenegarConsignacionParams) {
     try {
-      const usuario = await this.verificarUsuario(params.id_usuario);
-
-      if ((usuario.success = false || !usuario.data))
-        return {
-          success: false,
-          error: usuario.error,
-          detalle: usuario.detalle,
-        };
-
-      if (usuario.data.rol !== "admin")
-        return {
-          success: false,
-          error: "Operacion denegada",
-          detalle:
-            "El usuario proveido no tiene los permisos para realizar esta operacion",
-        };
       const aprobarConsignacionResponse = await prisma.consignaciones.update({
         where: {
           id: params.id_consignacion,
@@ -273,7 +194,17 @@ export class Consignaciones {
               porcentaje_descuento: true,
             },
           },
-          inventario: true,
+          articulos: {
+            select: {
+              inventario: {
+                select: {
+                  titulo: true,
+                  editorial: true,
+                },
+              },
+              cantidad: true,
+            },
+          },
         },
       });
       if (!listadoConsignaciones)
@@ -284,92 +215,6 @@ export class Consignaciones {
         };
 
       return { success: true, data: listadoConsignaciones };
-    } catch (error) {
-      return {
-        success: false,
-        mensaje: "Hubo un error durante la operacion",
-        error: error,
-      };
-    }
-  }
-
-  private async verificarUsuario(id: string) {
-    try {
-      const usuario = await prisma.usuario.findUnique({
-        where: {
-          id: id,
-        },
-      });
-
-      if (!usuario)
-        return {
-          success: false,
-          error: "Usuario no encontrado",
-          detalle: "El usuario proveido no fue encontrado",
-        };
-      return {
-        success: true,
-        data: usuario,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        mensaje: "Hubo un error durante la operacion",
-        error: error,
-      };
-    }
-  }
-
-  private async reintegrarLibros(id: string, cantidad: number) {
-    try {
-      const reintegrarResponse = await prisma.inventario.update({
-        where: { id: id },
-        data: {
-          cantidad: { increment: cantidad },
-        },
-      });
-      if (!reintegrarResponse)
-        return {
-          success: false,
-          error: "Error de reintegracion",
-          detalle: "Hubo un error durante la reintegracion ",
-        };
-
-      return { success: true, data: reintegrarResponse };
-    } catch (error) {}
-  }
-
-  private async consignarLibros(id: string, cantidad: number) {
-    try {
-      const consignarResponse = await prisma.inventario.update({
-        where: { id: id },
-        data: {
-          cantidad: { decrement: cantidad },
-        },
-      });
-      if (!consignarResponse)
-        return {
-          success: false,
-          error: "Error de consignación",
-          detalle: "Hubo un error durante la consignación ",
-        };
-
-      return { success: true, data: consignarResponse };
-    } catch (error) {}
-  }
-
-  private async verificarCantidad(id_libro: string, cantidad: number) {
-    try {
-      const verificarCantidadResponse = await prisma.inventario.findUnique({
-        where: {
-          id: id_libro,
-          cantidad: {
-            gte: cantidad,
-          },
-        },
-      });
-
-      return { success: true, data: verificarCantidadResponse };
     } catch (error) {
       return {
         success: false,

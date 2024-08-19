@@ -1,8 +1,12 @@
 export interface ICrearConsignacionParams {
-  id_libro: string;
-  cantidad: number;
   id_usuario: string;
   id_institucion: string;
+  articulos: IDetalleArticulos[];
+}
+
+export interface IDetalleArticulos {
+  id_inventario: string;
+  cantidad: number;
 }
 
 export interface IActualizarConsignacionParams {
