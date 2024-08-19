@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { ICrearFacturaParams } from "./types";
 import { Result } from "../../../utils/result";
+import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { Historial } from "../../historial/module/Historial";
 import { ErroresFactura } from "../errors/erroresFactura";
+import { ICrearFacturaParams } from "./types";
 
 const prisma = new PrismaClient();
+const historial = new Historial();
 
 export class Factura {
   async crearFactura(params: ICrearFacturaParams) {
@@ -18,6 +21,20 @@ export class Factura {
           });
 
           if (!inventario) {
+            throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
+          }
+
+          const retirarInventario = await prisma.inventario.update({
+            where: {
+              id: articulo.id_inventario,
+              cantidad: { gte: articulo.cantidad },
+            },
+            data: {
+              cantidad: { decrement: articulo.cantidad },
+            },
+          });
+
+          if (!retirarInventario) {
             throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
           }
 
@@ -47,6 +64,15 @@ export class Factura {
       });
       if (!crearFacturaResponse)
         return Result.customError(ErroresFactura.FACTURA_NO_CREADA);
+
+      await historial.agregarHistorial({
+        accion: EAccionHistorial.CREATE,
+        id_usuario: params.id_usuario,
+        recurso: {
+          recurso: ERecursos.FACTURA,
+          id_recurso: crearFacturaResponse.id,
+        },
+      });
 
       return Result.success(crearFacturaResponse);
     } catch (error) {

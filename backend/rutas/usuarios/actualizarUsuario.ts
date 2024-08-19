@@ -2,10 +2,11 @@ import { Router } from "express";
 import { Usuario } from "./module/Usuario";
 import { Result } from "../../utils/result";
 import { ErroresGenericos } from "../../src/errores";
+import { activeUser } from "../../middleware/activeUser";
 
 const router = Router();
 
-router.put("/usuario", async (req, res) => {
+router.put("/usuario", activeUser, async (req, res) => {
   try {
     const usuario = new Usuario();
 
