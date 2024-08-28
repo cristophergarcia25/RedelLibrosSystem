@@ -61,6 +61,7 @@ export class Consignaciones {
         data: {
           institucion: { connect: { id: params.id_institucion } },
           id_usuario: params.id_usuario,
+          fecha_corte: params.fecha_corte,
           estado: "P",
           articulos: {
             create: articulos,
@@ -93,7 +94,28 @@ export class Consignaciones {
   }
 
   async actualizarConsignacion(params: IActualizarConsignacionParams) {
-    console.log(":p");
+    try {
+      const updateConsignacionRespone = await prisma.consignaciones.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          ...(params.fecha_corte && { fecha_corte: params.fecha_corte }),
+          ...(params.id_institucion && {
+            id_institucion: params.id_institucion,
+          }),
+          ...(params.id_usuario && {
+            id_usuario: params.id_usuario,
+          }),
+        },
+      });
+      if (!updateConsignacionRespone)
+        return Result.errorOperacion(
+          ErroresConsignacion.CONSIGNACION_NO_ACTUALIZADA
+        );
+
+      return Result.success(updateConsignacionRespone);
+    } catch (error) {}
   }
 
   async aprobarConsignacion(params: IAprobarConsignacionParams) {
