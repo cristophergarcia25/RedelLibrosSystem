@@ -1,6 +1,7 @@
 export interface ICrearConsignacionParams {
   id_usuario: string;
   id_institucion: string;
+  fecha_corte: string;
   articulos: IDetalleArticulos[];
 }
 
@@ -10,9 +11,8 @@ export interface IDetalleArticulos {
 }
 
 export interface IActualizarConsignacionParams {
-  id_consignacion: string;
-  id_libro?: string;
-  cantidad?: number;
+  id: string;
+  fecha_corte?: string;
   id_usuario?: string;
   id_institucion?: string;
 }

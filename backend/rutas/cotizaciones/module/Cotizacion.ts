@@ -116,6 +116,7 @@ export class Cotizacion {
         },
         data: {
           estado: "D",
+          justificacion: params.detalle,
         },
       });
       if (!denegarCotizacionResponse)

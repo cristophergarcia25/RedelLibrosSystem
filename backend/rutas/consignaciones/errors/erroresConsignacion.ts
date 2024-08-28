@@ -9,4 +9,10 @@ export class ErroresConsignacion {
     error: "Consignacion no creada",
     detalle: "Ocurrio un error al crear la consignacion en la base de datos",
   };
+
+  static CONSIGNACION_NO_ACTUALIZADA = {
+    error: "Consignacion no actualizada",
+    detalle:
+      "Ocurrio un error al actualizar la consignacion en la base de datos",
+  };
 }

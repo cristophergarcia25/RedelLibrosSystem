@@ -100,6 +100,7 @@ model consignaciones {
   estado         String
   id_usuario     String
   detalle        String?
+  fecha_corte    String?
   institucion    institucion                 @relation(fields: [id_institucion], references: [id])
   id_institucion String                      @db.ObjectId
   articulos      consignaciones_inventario[]
@@ -150,6 +151,7 @@ model cotizaciones {
   usuario             usuario             @relation(fields: [id_usuario_solicita], references: [id])
   id_usuario_solicita String              @db.ObjectId
   estado              String
+  justificacion       String?
   aprobado_por        aprobado_por?
 }
 
