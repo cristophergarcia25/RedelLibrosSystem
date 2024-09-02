@@ -34,4 +34,5 @@ export enum ERecursos {
   FACTURA = "Factura",
   COTIZACION = "Cotizacion",
   USUARIO = "Usuario",
+  PEDIDO = "Pedido",
 }

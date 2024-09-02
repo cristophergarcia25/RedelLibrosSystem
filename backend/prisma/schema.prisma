@@ -24,6 +24,8 @@ model usuario {
   historial_operaciones historial_operaciones[]
   cotizaciones          cotizaciones[]
   facturas              factura[]
+  consignaciones        consignaciones[]
+  pedidos               pedidos[]
 }
 
 model institucion {
@@ -47,6 +49,7 @@ model institucion {
   consignaciones             consignaciones[]
   factura                    factura[]
   cotizaciones               cotizaciones[]
+  pedidos                    pedidos[]
 }
 
 model historial_operaciones {
@@ -70,6 +73,8 @@ model inventario {
   total_fob       Float
   estado          String?
   razon           String?
+  proveedor       proveedor                   @relation(fields: [id_proveedor], references: [id])
+  id_proveedor    String                      @db.ObjectId
   consignaciones  consignaciones_inventario[]
   facturas        factura_inventario[]
 }
@@ -86,19 +91,21 @@ model retaceo {
 }
 
 model proveedor {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  nombre    String
-  correo    String
-  direccion String
-  telefono  String
-  retaceo   retaceo[]
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  nombre     String
+  correo     String
+  direccion  String
+  telefono   String
+  retaceo    retaceo[]
+  inventario inventario[]
 }
 
 model consignaciones {
   id             String                      @id @default(auto()) @map("_id") @db.ObjectId
   fecha          DateTime                    @default(now())
   estado         String
-  id_usuario     String
+  usuario        usuario                     @relation(fields: [id_usuario], references: [id])
+  id_usuario     String                      @db.ObjectId
   detalle        String?
   fecha_corte    String?
   institucion    institucion                 @relation(fields: [id_institucion], references: [id])
@@ -153,6 +160,19 @@ model cotizaciones {
   estado              String
   justificacion       String?
   aprobado_por        aprobado_por?
+}
+
+model pedidos {
+  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
+  institucion         institucion         @relation(fields: [id_institucion], references: [id])
+  id_institucion      String              @db.ObjectId
+  estado              String
+  orden_compra        String
+  fecha_compra        DateTime
+  fecha_entrega       DateTime
+  detalle_articulos   detalle_articulos[]
+  usuario             usuario             @relation(fields: [id_usuario_solicita], references: [id])
+  id_usuario_solicita String              @db.ObjectId
 }
 
 type detalle_articulos {

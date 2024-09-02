@@ -60,12 +60,12 @@ export class Consignaciones {
       const crearConsignacionResponse = await prisma.consignaciones.create({
         data: {
           institucion: { connect: { id: params.id_institucion } },
-          id_usuario: params.id_usuario,
           fecha_corte: params.fecha_corte,
           estado: "P",
           articulos: {
             create: articulos,
           },
+          usuario: { connect: { id: params.id_usuario } },
         },
       });
 
