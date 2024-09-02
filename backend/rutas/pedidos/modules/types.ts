@@ -1,6 +1,7 @@
 export interface ICrearPedidoParams {
   id_institucion: string;
   id_usuario_solicita: string;
+  id_proveedor: string;
   fecha_compra: Date;
   fecha_entrega: Date;
   orden_compra: string;
@@ -12,6 +13,7 @@ export interface ICrearPedidoCotizacionParams {
   fecha_compra: Date;
   fecha_entrega: Date;
   orden_compra: string;
+  id_proveedor: string;
 }
 
 export interface IDetalleArticulos {

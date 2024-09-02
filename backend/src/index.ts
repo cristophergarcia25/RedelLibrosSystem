@@ -34,6 +34,10 @@ import listarProveedores from "../rutas/proveedor/listarProveedores";
 import listarHistorial from "../rutas/historial/listarHistorial";
 import crearFactura from "../rutas/factura/crearFactura";
 import listarFacturas from "../rutas/factura/listarFactura";
+import crearPedido from "../rutas/pedidos/crearPedido";
+import crearPedidoCotizacion from "../rutas/pedidos/crearPedidoCotizacion";
+import entregarPedido from "../rutas/pedidos/entregarPedido";
+import listarPedidos from "../rutas/pedidos/listarPedidos";
 import session from "express-session";
 
 const app = express();
@@ -98,6 +102,10 @@ app.use("/", borrarProveedor);
 app.use("/", listarHistorial);
 app.use("/", crearFactura);
 app.use("/", listarFacturas);
+app.use("/", crearPedido);
+app.use("/", crearPedidoCotizacion);
+app.use("/", entregarPedido);
+app.use("/", listarPedidos);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);
