@@ -31,6 +31,7 @@ export class Inventario {
           costo_fob: params.costo_fob,
           titulo: params.titulo,
           estado: "activo",
+          id_proveedor: params.id_proveedor,
         },
       });
       if (!agregarLibroResponse)
@@ -53,14 +54,6 @@ export class Inventario {
 
   async actualizarLibro(params: IActualizarLibroParams) {
     try {
-      const usuarioActivo = await usuario.obtenerUsuario(params.id_usuario);
-
-      if (usuarioActivo.error || !usuarioActivo.data)
-        throw usuarioActivo.detalle;
-
-      if (!rolesPermitidos.includes(usuarioActivo.data.rol))
-        Result.errorOperacion(ErroresInventario.ACCESO_DENEGADO);
-
       const actualizarLibroResponse = await prisma.inventario.update({
         where: {
           id: params.id,
@@ -75,6 +68,7 @@ export class Inventario {
             costo_fob: params.costo_fob,
           }),
           ...(params.titulo && { titulo: params.titulo }),
+          ...(params.id_proveedor && { id_proveedor: params.id_proveedor }),
         },
       });
 
@@ -82,15 +76,6 @@ export class Inventario {
         Result.errorOperacion(ErroresInventario.LIBRO_NO_ACTUALIZADO);
       if (params.precio_unitario || params.cantidad || params.costo_fob)
         return await this.actualizarTotalVenta(actualizarLibroResponse);
-
-      await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
-        id_usuario: params.id_usuario,
-        recurso: {
-          recurso: ERecursos.INVENTARIO,
-          id_recurso: actualizarLibroResponse.id,
-        },
-      });
 
       return Result.success(actualizarLibroResponse);
     } catch (error) {
