@@ -75,6 +75,7 @@ model inventario {
   razon           String?
   proveedor       proveedor                   @relation(fields: [id_proveedor], references: [id])
   id_proveedor    String                      @db.ObjectId
+  numero_factura  String
   consignaciones  consignaciones_inventario[]
   facturas        factura_inventario[]
 }
@@ -98,6 +99,7 @@ model proveedor {
   telefono   String
   retaceo    retaceo[]
   inventario inventario[]
+  pedidos    pedidos[]
 }
 
 model consignaciones {
@@ -173,6 +175,8 @@ model pedidos {
   detalle_articulos   detalle_articulos[]
   usuario             usuario             @relation(fields: [id_usuario_solicita], references: [id])
   id_usuario_solicita String              @db.ObjectId
+  proveedor           proveedor           @relation(fields: [id_proveedor], references: [id])
+  id_proveedor        String              @db.ObjectId
 }
 
 type detalle_articulos {

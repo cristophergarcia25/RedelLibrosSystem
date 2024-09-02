@@ -42,6 +42,7 @@ export class Pedidos {
           fecha_compra: params.fecha_compra,
           fecha_entrega: params.fecha_entrega,
           orden_compra: params.orden_compra,
+          id_proveedor: params.id_proveedor,
           estado: "Por Entregar",
         },
       });
@@ -89,6 +90,7 @@ export class Pedidos {
           fecha_compra: params.fecha_compra,
           fecha_entrega: params.fecha_entrega,
           orden_compra: params.orden_compra,
+          id_proveedor:params.
         },
       });
 

@@ -7,6 +7,7 @@ export interface IAgregarLibroParams {
   costo_fob: number;
   id_usuario: string;
   id_proveedor: string;
+  numero_factura: string;
 }
 
 export interface IActualizarLibroParams {
@@ -18,6 +19,7 @@ export interface IActualizarLibroParams {
   costo_fob?: number;
   id_proveedor?: string;
   id_usuario?: string;
+  numero_factura?: string;
 }
 
 export interface ICambioEstado {
