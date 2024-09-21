@@ -1,7 +1,7 @@
 import { EAccionHistorial, ERecursos } from "../../../utils/types";
 
 export interface IHistorialParams {
-  accion: EAccionHistorial;
+  accion: string;
   id_usuario: string;
   recurso: IRecurso;
 }

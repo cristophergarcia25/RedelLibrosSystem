@@ -39,7 +39,7 @@ export class Inventario {
         return Result.errorOperacion(ErroresInventario.INVENTARIO_NO_AGREGADO);
 
       await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: "Nuevo Libro Ingresado",
         id_usuario: params.id_usuario,
         recurso: {
           recurso: ERecursos.INVENTARIO,
@@ -53,7 +53,10 @@ export class Inventario {
     }
   }
 
-  async actualizarLibro(params: IActualizarLibroParams) {
+  async actualizarLibro(
+    params: IActualizarLibroParams,
+    usuarioModificacion: string
+  ) {
     try {
       const actualizarLibroResponse = await prisma.inventario.update({
         where: {
@@ -80,6 +83,15 @@ export class Inventario {
         Result.errorOperacion(ErroresInventario.LIBRO_NO_ACTUALIZADO);
       if (params.precio_unitario || params.cantidad || params.costo_fob)
         return await this.actualizarTotalVenta(actualizarLibroResponse);
+
+      await historial.agregarHistorial({
+        accion: "Información de Inventario Actualizada",
+        id_usuario: usuarioModificacion,
+        recurso: {
+          recurso: ERecursos.INVENTARIO,
+          id_recurso: params.id,
+        },
+      });
 
       return Result.success(actualizarLibroResponse);
     } catch (error) {

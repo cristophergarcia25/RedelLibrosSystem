@@ -10,7 +10,6 @@ export class Retaceo {
   async crearRetaceo(params: ICrearRetaceoParams) {
     try {
       const date = new Date();
-      console.log(date);
       const crearRetaceoResponse = await prisma.retaceo.create({
         data: {
           id_usuario: params.id_usuario,

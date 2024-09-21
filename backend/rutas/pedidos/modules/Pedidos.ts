@@ -50,7 +50,7 @@ export class Pedidos {
         return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_CREADA);
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: 'Pedido Colocado',
         id_usuario: crearPedidoResponse.id_usuario_solicita,
         recurso: {
           recurso: ERecursos.PEDIDO,
@@ -98,7 +98,7 @@ export class Pedidos {
         return Result.errorOperacion(ErroresPedido.PEDIDO_NO_CREADO);
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: 'Pedido creado desde cotización',
         id_usuario: crearPedidoResponse.id_usuario_solicita,
         recurso: {
           recurso: ERecursos.PEDIDO,
@@ -120,7 +120,7 @@ export class Pedidos {
         id: idPedido,
       },
       data: {
-        estado: "Por Entregar",
+        estado: "Entregado",
       },
     });
     if (!entregarPedidoResponse)
