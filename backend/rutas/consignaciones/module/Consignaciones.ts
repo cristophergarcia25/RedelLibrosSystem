@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
-import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
-import { ErroresConsignacion } from "../errors/erroresConsignacion";
+import { ERecursos, ERoles } from "../../../utils/types";
 import { Historial } from "../../historial/module/Historial";
+import { ErroresConsignacion } from "../errors/erroresConsignacion";
 import {
   IActualizarConsignacionParams,
   IAprobarConsignacionParams,
@@ -75,7 +75,7 @@ export class Consignaciones {
         );
 
       await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: "Consignación Creada",
         id_usuario: params.id_usuario,
         recurso: {
           recurso: ERecursos.CONSIGNACION,
@@ -138,7 +138,7 @@ export class Consignaciones {
         };
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.APROBADO,
+        accion: "Aprobación de Consignación",
         id_usuario: aprobarConsignacionResponse.id_usuario,
         recurso: {
           recurso: ERecursos.CONSIGNACION,
@@ -172,7 +172,7 @@ export class Consignaciones {
           detalle: "Hubo un error durante la aprobacion de la consignacion",
         };
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.DENEGADO,
+        accion: "Consignación Denegada",
         id_usuario: aprobarConsignacionResponse.id_usuario,
         recurso: {
           recurso: ERecursos.CONSIGNACION,

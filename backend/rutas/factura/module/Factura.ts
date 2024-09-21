@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
-import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { ERecursos } from "../../../utils/types";
 import { Historial } from "../../historial/module/Historial";
 import { ErroresFactura } from "../errors/erroresFactura";
 import { ICrearFacturaParams } from "./types";
@@ -66,7 +66,7 @@ export class Factura {
         return Result.customError(ErroresFactura.FACTURA_NO_CREADA);
 
       await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: "Factura Creada",
         id_usuario: params.id_usuario,
         recurso: {
           recurso: ERecursos.FACTURA,

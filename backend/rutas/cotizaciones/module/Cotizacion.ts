@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Result } from "../../../utils/result";
-import { EAccionHistorial, ERecursos, ERoles } from "../../../utils/types";
+import { ERecursos, ERoles } from "../../../utils/types";
 import { ErroresCotizacion } from "../../cotizaciones/errors/erroresCotizacion";
 import { Historial } from "../../historial/module/Historial";
 import {
@@ -49,7 +49,7 @@ export class Cotizacion {
         return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_CREADA);
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: "Cotización Creada",
         id_usuario: crearCotizacionResponse.id_usuario_solicita,
         recurso: {
           recurso: ERecursos.COTIZACION,
@@ -88,7 +88,7 @@ export class Cotizacion {
         return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_APROBADA);
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.APROBADO,
+        accion: "Cotización Aprobada",
         id_usuario: params.id_usuario,
         recurso: {
           recurso: ERecursos.COTIZACION,
@@ -123,7 +123,7 @@ export class Cotizacion {
         return Result.errorOperacion(ErroresCotizacion.COTIZACION_NO_DENEGADA);
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.DENEGADO,
+        accion: "Cotización Denegada",
         id_usuario: denegarCotizacionResponse.id_usuario_solicita,
         recurso: {
           recurso: ERecursos.COTIZACION,
