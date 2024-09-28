@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { IActualizarRetaceoParams, ICrearRetaceoParams } from "./types";
+import { ERecursos } from "../../../utils/types";
 import { Historial } from "../../historial/module/Historial";
-import { EAccionHistorial, ERecursos } from "../../../utils/types";
+import { IActualizarRetaceoParams, ICrearRetaceoParams } from "./types";
 
 const prisma = new PrismaClient();
 const historial = new Historial();
@@ -18,6 +18,8 @@ export class Retaceo {
           fac: params.fac,
           parcial: params.parcial,
           id_proveedor: params.id_proveedor,
+          cheque: params.cheque,
+          total: params.total,
         },
       });
       if (!crearRetaceoResponse)
@@ -28,7 +30,7 @@ export class Retaceo {
         };
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.CREATE,
+        accion: "Retaceo Creado",
         id_usuario: crearRetaceoResponse.id_usuario,
         recurso: {
           recurso: ERecursos.RETACEO,
@@ -56,6 +58,8 @@ export class Retaceo {
           ...(params.id_proveedor && { id_proveedor: params.id_proveedor }),
           ...(params.id_usuario && { descripcion: params.descripcion }),
           ...(params.parcial && { parcial: params.parcial }),
+          ...(params.cheque && { cheque: params.cheque }),
+          ...(params.total && { total: params.total }),
         },
       });
       if (!actualizarRetaceoResponse)
@@ -66,7 +70,7 @@ export class Retaceo {
         };
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.UPDATE,
+        accion: "Retaceo Actualizado",
         id_usuario: actualizarRetaceoResponse.id_usuario,
         recurso: {
           recurso: ERecursos.RETACEO,
@@ -98,7 +102,7 @@ export class Retaceo {
         };
 
       const historialResponse = await historial.agregarHistorial({
-        accion: EAccionHistorial.DELETE,
+        accion: "Retaceo Eliminado",
         id_usuario: borrarRetaceoResponse.id_usuario,
         recurso: {
           recurso: ERecursos.RETACEO,

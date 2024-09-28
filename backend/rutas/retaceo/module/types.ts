@@ -4,6 +4,8 @@ export interface ICrearRetaceoParams {
   id_proveedor: string;
   descripcion: string;
   parcial: number;
+  cheque?: string;
+  total?: number;
 }
 
 export interface IActualizarRetaceoParams {
@@ -13,4 +15,6 @@ export interface IActualizarRetaceoParams {
   id_proveedor?: string;
   descripcion?: string;
   parcial?: number;
+  cheque?: string;
+  total?: number;
 }
