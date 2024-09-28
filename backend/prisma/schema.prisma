@@ -89,6 +89,8 @@ model retaceo {
   id_proveedor String    @db.ObjectId
   descripcion  String
   parcial      Float
+  cheque       String?
+  total        Int?
 }
 
 model proveedor {
