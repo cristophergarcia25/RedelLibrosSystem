@@ -8,6 +8,7 @@ export interface IAgregarLibroParams {
   id_usuario: string;
   id_proveedor: string;
   numero_factura: string;
+  proviene?: string;
 }
 
 export interface IActualizarLibroParams {
@@ -20,6 +21,7 @@ export interface IActualizarLibroParams {
   id_proveedor?: string;
   id_usuario?: string;
   numero_factura?: string;
+  proviene?: string;
 }
 
 export interface ICambioEstado {

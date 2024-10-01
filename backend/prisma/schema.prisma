@@ -73,6 +73,7 @@ model inventario {
   total_fob       Float
   estado          String?
   razon           String?
+  proviene        String?
   proveedor       proveedor                   @relation(fields: [id_proveedor], references: [id])
   id_proveedor    String                      @db.ObjectId
   numero_factura  String
