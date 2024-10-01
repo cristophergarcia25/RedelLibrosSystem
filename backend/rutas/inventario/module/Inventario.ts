@@ -33,6 +33,7 @@ export class Inventario {
           estado: "activo",
           id_proveedor: params.id_proveedor,
           numero_factura: params.numero_factura,
+          proviene: params.proviene,
         },
       });
       if (!agregarLibroResponse)
@@ -76,6 +77,7 @@ export class Inventario {
           ...(params.numero_factura && {
             numero_factura: params.numero_factura,
           }),
+          ...(params.proviene && { proviene: params.proviene }),
         },
       });
 
