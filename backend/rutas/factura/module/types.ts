@@ -3,6 +3,7 @@ export interface ICrearFacturaParams {
   tipo_documento: string;
   id_institucion: string;
   id_usuario: string;
+  estado: string;
   articulos: IDetalleArticulos[];
 }
 
