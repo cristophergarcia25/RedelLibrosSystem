@@ -31,7 +31,7 @@ export class Consignaciones {
             throw Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
           }
 
-          const retirarInventario = await prisma.inventario.update({
+          /*const retirarInventario = await prisma.inventario.update({
             where: {
               id: articulo.id_inventario,
               cantidad: { gte: articulo.cantidad },
@@ -42,6 +42,19 @@ export class Consignaciones {
           });
 
           if (!retirarInventario) {
+            throw Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
+          }*/
+
+          const consignarInventario = await prisma.inventario_retenido.create({
+            data: {
+              inventarioId: articulo.id_inventario,
+              motivo: "Consignacion",
+              activo: true,
+              cantidad: articulo.cantidad,
+            },
+          });
+
+          if (!consignarInventario) {
             throw Result.customError(ErroresConsignacion.LIBROS_NO_ENCONTRADOS);
           }
 

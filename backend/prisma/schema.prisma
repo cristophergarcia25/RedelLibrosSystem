@@ -62,23 +62,33 @@ model historial_operaciones {
 }
 
 model inventario {
-  id              String                      @id @default(auto()) @map("_id") @db.ObjectId
-  isbn            String
-  editorial       String
-  titulo          String
-  cantidad        Int
-  precio_unitario Float
-  total           Float
-  costo_fob       Float
-  total_fob       Float
-  estado          String?
-  razon           String?
-  proviene        String?
-  proveedor       proveedor                   @relation(fields: [id_proveedor], references: [id])
-  id_proveedor    String                      @db.ObjectId
-  numero_factura  String
-  consignaciones  consignaciones_inventario[]
-  facturas        factura_inventario[]
+  id                  String                      @id @default(auto()) @map("_id") @db.ObjectId
+  isbn                String
+  editorial           String
+  titulo              String
+  cantidad            Int
+  precio_unitario     Float
+  total               Float
+  costo_fob           Float
+  total_fob           Float
+  estado              String?
+  razon               String?
+  proviene            String?
+  proveedor           proveedor                   @relation(fields: [id_proveedor], references: [id])
+  id_proveedor        String                      @db.ObjectId
+  numero_factura      String
+  consignaciones      consignaciones_inventario[]
+  facturas            factura_inventario[]
+  inventario_retenidp inventario_retenido[]
+}
+
+model inventario_retenido {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  inventario   inventario @relation(fields: [inventarioId], references: [id])
+  inventarioId String     @db.ObjectId
+  cantidad     Int
+  motivo       String
+  activo       Boolean
 }
 
 model retaceo {

@@ -38,6 +38,7 @@ import crearPedido from "../rutas/pedidos/crearPedido";
 import crearPedidoCotizacion from "../rutas/pedidos/crearPedidoCotizacion";
 import entregarPedido from "../rutas/pedidos/entregarPedido";
 import listarPedidos from "../rutas/pedidos/listarPedidos";
+import obtenerCantidadRetenida from "../rutas/retenido/obtenerCantidadRetenida";
 import session from "express-session";
 
 const app = express();
@@ -106,6 +107,7 @@ app.use("/", crearPedido);
 app.use("/", crearPedidoCotizacion);
 app.use("/", entregarPedido);
 app.use("/", listarPedidos);
+app.use("/", obtenerCantidadRetenida);
 
 app.listen(4000);
 console.log("Servidor en puerto", 4000);

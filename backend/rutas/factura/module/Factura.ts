@@ -24,18 +24,33 @@ export class Factura {
             throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
           }
 
-          const retirarInventario = await prisma.inventario.update({
-            where: {
-              id: articulo.id_inventario,
-              cantidad: { gte: articulo.cantidad },
-            },
-            data: {
-              cantidad: { decrement: articulo.cantidad },
-            },
-          });
+          if (params.estado === "F") {
+            const retirarInventario = await prisma.inventario.update({
+              where: {
+                id: articulo.id_inventario,
+                cantidad: { gte: articulo.cantidad },
+              },
+              data: {
+                cantidad: { decrement: articulo.cantidad },
+              },
+            });
 
-          if (!retirarInventario) {
-            throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
+            if (!retirarInventario) {
+              throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
+            }
+          } else {
+            const retenerInventario = await prisma.inventario_retenido.create({
+              data: {
+                inventarioId: articulo.id_inventario,
+                motivo: "Factura Pendiente",
+                activo: true,
+                cantidad: articulo.cantidad,
+              },
+            });
+
+            if (!retenerInventario) {
+              throw Result.customError(ErroresFactura.LIBROS_NO_ENCONTRADOS);
+            }
           }
 
           const subtotal = articulo.cantidad * inventario.precio_unitario;
@@ -56,7 +71,7 @@ export class Factura {
           tipo_documento: params.tipo_documento,
           institucion: { connect: { id: params.id_institucion } },
           usuario: { connect: { id: params.id_usuario } },
-          estado: "P",
+          estado: params.estado,
           articulos: {
             create: articulos,
           },
